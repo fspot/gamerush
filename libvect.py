@@ -1,6 +1,7 @@
 import math
 
 
+
 class Vector:
 	
 	def __init__(self, x1=0, x2=0, y1=0, y2=0):
@@ -22,6 +23,29 @@ class Vector:
 		return math.sqrt( (self.x2-self.x1)**2 + (self.y2-self.y1)**2 )
 		
 		
+		
+		
+class FloatVector:
+	def __init__(self, x, y):
+		self.x = x
+		self.y = y
+		
+	def __add__(self, vect):
+		return FloatVector(self.x+vect.x,self.y+vect.y)
+		
+	def __iadd__(self, vect):
+		self.x += vect.x
+		self.y += vect.y
+		return self
+	
+	def __mul__(self, value):
+		return FloatVector(self.x*value,self.y*value)
+		
+	def __rmul__(self, value):
+		return self*value
+	
+	def Norm(self):
+		return math.sqrt( self.x**2 + self.y**2 )
 		
 		
 def addPts(p1,p2):

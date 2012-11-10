@@ -1,14 +1,12 @@
 import libvect
+import const
 
-ELFE, NAIN = 0, 1
-SPAWN_NAIN = (0,0)
-SPAWN_ELFE = (0,0)
 
 class PersoServ:
-	def __init__(self, race, spawn)
+	def __init__(self, race, spawn):
 		self.race = race
 		self.contact = None
-		self.vitesse = [0,0]
+		self.vitesse = FloatVector(0.0,0.0)
 		self.position = spawn
 		
 		self.input_z = False
@@ -20,21 +18,35 @@ class PersoServ:
 	
 		if (race == ELFE):
 			self.vMaxCourse = 10
-			self.AccCourse = 3
-			self.AccAir = 3
+			self.AccCourse = 5
+			self.AccSaut = FloatVector(0,-3)
 			self.Frot = 0.3
-			self.pdv
+			self.jetpackEnergy = JETPACK_MAX
+			self.move_L = FloatVector(-AccCourse,0)
+			self.move_R = FloatVector(AccCourse,0)
+			self.hauteur = 10
+			self.largeur = 10
 			
-		else if (race == NAIN):
+		elif (race == NAIN):
 			self.vMaxCourse = 5
 			self.AccCourse = 3
-			self.AccAir = 10
+			self.AccSaut = FloatVector(0,-10)
 			self.Frot = 0.3
-			self.pdv
+			self.pdv = 3
+			self.move_L = FloatVector(-AccCourse,0)
+			self.move_R = FloatVector(AccCourse,0)
+			self.hauteur = 10
+			self.largeur = 10
 
-			# vitesse + grav + inputs (saut, depl) - frot si sol - capé vitesseMax
-			# saut
-			#	elfe: jetpack energy
-			#	nain: contact
-			#
-			#
+			
+	def bordDroit(self):
+		return self.position.x + self.largeur
+		
+	def bordBas(self):
+		return self.position.y + self.hauteur
+
+	def serialize(self):
+		dict = {}
+		dict['x'] = self.position.x
+		dict['y'] = self.position.y
+		return dict

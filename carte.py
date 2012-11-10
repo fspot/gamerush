@@ -1,6 +1,4 @@
-COTE_CUBE = 32
-SIZE_X = 10
-SIZE_Y = 10
+import const
 
 
 class Cube:
@@ -49,6 +47,9 @@ class Carte:
 		col = {}
 		lig = {}
 		
+		cubeGrid = [[None for j in range(SIZE_Y)] for i in range(SIZE_X)]
+
+		
 		for i in range(0,SIZE_X):
 			for i in range(0,SIZE_Y):
 				if i-1<0 or grid[i-1,j]:
@@ -79,8 +80,8 @@ class Carte:
 						lig[i] = []
 					
 					newCube = Cube(i,j,h,b,g,d)
-					col[j].append(newCube)
-										
+					col[j].append(newCube)										
 					lig[i].append(newCube)
+					cubeGrid[i][j] = newCube
 					
 
