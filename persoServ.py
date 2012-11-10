@@ -36,8 +36,7 @@ class PersoServ:
 			self.move_R = FloatVector(AccCourse,0)
 			self.hauteur = 10
 			self.largeur = 10
-
-			
+	
 	def bordDroit(self):
 		return self.position.x + self.largeur
 		
