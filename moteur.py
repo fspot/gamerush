@@ -35,7 +35,7 @@ class Moteur:
 	def tick(self):
 
 		for perso in itertools.chain(self.nains, self.elfes):
-			
+			print '0',perso.position.x
 			#mouvement
 			acc = FloatVector(0,0)
 			acc += GRAVITE
@@ -46,13 +46,12 @@ class Moteur:
 					jetpackEnergy -= JETPACK_CONSO
 				elif (perso.race == NAIN and perso.contact):
 					acc += perso.AccSaut
-			pdb.set_trace()
 			if (perso.input_q):
 				acc += perso.move_L
 				
 			if (perso.input_d):
 				acc += perso.move_R
-				
+			print '1',perso.position.x	
 			perso.vitesse += acc
 
 			if (perso.contact):
@@ -60,9 +59,8 @@ class Moteur:
 				norme = perso.vitesse.Norm()
 				if (norme > perso.vMaxCourse):
 					perso.vitesse *= (perso.vMaxCourse/norme)
-				
+			print '2',perso.position.x	
 			perso.position += perso.vitesse
-			pdb.set_trace()
 			#sortie ecran
 			if (perso.position.x < 0):
 				perso.position.x = 0.0
@@ -73,47 +71,51 @@ class Moteur:
 			if (perso.position.y > SIZE_Y*COTE_CUBE):
 				perso.position.y = SIZE_Y*COTE_CUBE
 				
-			pdb.set_trace()
+			print '3',perso.position.x
 			#collisions
 			for liste in self.carte.cubeGrid:
 				for cube in liste:
-					left = (cube.borderLeft - perso.bordDroit());
-					right = (cube.borderRight - perso.position.x);
-					top = (cube.borderUp - perso.bordBas());
-					bottom = (cube.borderDown - perso.position.y);
-					
-		 
-					if not (left > 0 or right < 0 or top > 0 or bottom < 0):
-						mtd = FloatVector(0.0,0.0)
-						if abs(left) < right:
-							mtd.x = left;
-						else:
-							mtd.x = right;
+					if cube is not None:
+						pdb.set_trace()
+						left = (cube.borderLeft - perso.bordDroit());
+						right = (cube.borderRight - perso.position.x);
+						top = (cube.borderUp - perso.bordBas());
+						bottom = (cube.borderDown - perso.position.y);
 						
-						if abs(top) < bottom:
-							mtd.y = top;
-						else:
-							mtd.y = bottom;
-						
-			
-						if abs(left) < right:
-							mtd.X = left
-						else:
-							mtd.X = right
-						
-						if abs(top) < bottom:
-							mtd.Y = top
-						else:
-							mtd.Y = bottom
-					
+			 
+						if not (left > 0 or right < 0 or top > 0 or bottom < 0):
+							mtd = FloatVector(0.0,0.0)
+							print 'a',mtd.x,mtd.y
+							if abs(left) < right:
+								mtd.x = left;
+							else:
+								mtd.x = right;
+							print 'b',mtd.x,mtd.y
+							if abs(top) < bottom:
+								mtd.y = top;
+							else:
+								mtd.y = bottom;
+							print 'c',mtd.x,mtd.y
+				
+							if abs(left) < right:
+								mtd.X = left
+							else:
+								mtd.X = right
+							print 'd',mtd.x,mtd.y
+							if abs(top) < bottom:
+								mtd.Y = top
+							else:
+								mtd.Y = bottom
+							print 'e',mtd.x,mtd.y
 
-						if abs(mtd.x) < abs(mtd.y):
-							mtd.y = 0
-						else:
-							mtd.x = 0
-						
-						perso.position += mtd
-			
+							if abs(mtd.x) < abs(mtd.y):
+								mtd.y = 0
+							else:
+								mtd.x = 0
+	
+							perso.position += mtd
+
+			print '5',perso.position.x
 			#specifique race
 			if (perso.race == ELFE):
 				if perso.jetpackEnergy < JETPACK_MAX:
@@ -125,8 +127,5 @@ class Moteur:
 if __name__ == '__main__':
 	m = Moteur()
 	m.creerPerso(NAIN)
-	pdb.set_trace()
 	nain = m.tick()
-	pdb.set_trace()
 	nain = m.tick()
-	pdb.set_trace()

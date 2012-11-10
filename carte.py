@@ -1,4 +1,5 @@
 from c import *
+import pdb
 
 class Cube:
 	def __init__(self, posX, posY, h=False, b=False, g=False, d=False):
@@ -34,15 +35,9 @@ class Cube:
 	
 class Carte:
 	def __init__(self):
-		reverseGrid =[
-			[0,0,0],
-			[0,0,0],
-			[0,0,0],
-			[0,0,0],
-			[0,0,0],
-		]
+
 		
-		grid = zip(*reverseGrid)
+		grid = zip(*REVERSEGRID)
 		print repr(grid)
 		
 		col = {}
@@ -51,39 +46,31 @@ class Carte:
 		self.cubeGrid = [[None for j in range(SIZE_Y)] for i in range(SIZE_X)]
 		print repr(self.cubeGrid)
 
-		
 		for i in range(0,SIZE_X):
 			for j in range(0,SIZE_Y):
-				if i-1<0 or grid[i-1][j]:
-					g=True
-				else:
-					g=False
-					
-				if i+1>=SIZE_X or grid[i+1][j]:
-					d=True
-				else:
-					d=False
-					
-				if j-1<0 or grid[i][j-1]:
-					h=True
-				else:
-					h=False
-					
-				if j+1>=SIZE_Y or grid[i][j+1]:
-					b=True
-				else:
-					b=False
-					
-				if not (g and b and h and d):
-					if j not in col:
-						col[j] = []
+				if grid[i][j]:
+					if i-1<0 or grid[i-1][j]:
+						g=True
+					else:
+						g=False
 						
-					if i not in lig:
-						lig[i] = []
-					
-					newCube = Cube(i,j,h,b,g,d)
-					col[j].append(newCube)										
-					lig[i].append(newCube)
-					self.cubeGrid[i][j] = newCube
+					if i+1>=SIZE_X or grid[i+1][j]:
+						d=True
+					else:
+						d=False
+						
+					if j-1<0 or grid[i][j-1]:
+						h=True
+					else:
+						h=False
+						
+					if j+1>=SIZE_Y or grid[i][j+1]:
+						b=True
+					else:
+						b=False
+						
+					if not (g and b and h and d):
+						newCube = Cube(i,j,h,b,g,d)
+						self.cubeGrid[i][j] = newCube
 					
 

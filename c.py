@@ -9,8 +9,16 @@ JETPACK_CONSO = 1
 JETPACK_MAX = 30
 
 COTE_CUBE = 32
-SIZE_X = 3
-SIZE_Y = 4
+
+REVERSEGRID =[
+	[0,0,0],
+	[0,0,0],
+	[0,0,0],
+	[0,0,0],
+]
+
+SIZE_X = len(REVERSEGRID[0])
+SIZE_Y = len(REVERSEGRID)
 
 GRAVITE = FloatVector(0, 5)
 JETPACK_REFILL = 0.5
