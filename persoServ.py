@@ -46,7 +46,7 @@ class PersoServ:
 		return self.position.y + self.hauteur
 
 	def serialize(self):
-		dict = {}
-		dict['x'] = self.position.x
-		dict['y'] = self.position.y
-		return dict
+		dicti = {}
+		dicti['x'] = self.position.x
+		dicti['y'] = self.position.y
+		return dicti

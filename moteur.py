@@ -16,7 +16,7 @@ class Moteur:
 		
 	def creerPerso(race)
 		perso = PersoServ(race)
-		if (race == const.ELFE):
+		if (race == ELFE):
 			self.elfes.append(perso)
 		else: #NAIN
 			self.nains.append(perso)
@@ -25,7 +25,7 @@ class Moteur:
 		
 		
 	def detruirePerso(perso)
-		if (perso.race == const.ELFE):
+		if (perso.race == ELFE):
 			self.elfes.remove(perso)
 		else:	#NAIN
 			self.nains.remove(perso)
@@ -39,10 +39,10 @@ class Moteur:
 			deplacement = perso.vitesse + GRAVITE
 			
 			if (perso.input_z):
-				if (perso.race == const.ELFE and perso.jetpackEnergy > 0)
+				if (perso.race == ELFE and perso.jetpackEnergy > 0):
 					deplacement += perso.AccSaut
-					jetpackEnergy -= const.JETPACK_CONSO
-				elif (perso.race == NAIN and perso.contact)
+					jetpackEnergy -= JETPACK_CONSO
+				elif (perso.race == NAIN and perso.contact):
 					deplacement += perso.AccSaut
 			
 			if (perso.input_q):
@@ -59,14 +59,14 @@ class Moteur:
 				
 			perso.position += deplacement
 			#sortie ecran
-			if (perso.position.x < 0)
+			if (perso.position.x < 0):
 				perso.position.x = 0.0
-			if (perso.position.x > const.SIZE_X*const.COTE_CUBE)
-				perso.position.x = const.SIZE_X*const.COTE_CUBE
-			if (perso.position.y < 0)
+			if (perso.position.x > SIZE_X*COTE_CUBE):
+				perso.position.x = SIZE_X*COTE_CUBE
+			if (perso.position.y < 0):
 				perso.position.y = 0.0
-			if (perso.position.y > const.SIZE_Y*const.COTE_CUBE)
-				perso.position.y = const.SIZE_Y*const.COTE_CUBE
+			if (perso.position.y > SIZE_Y*COTE_CUBE):
+				perso.position.y = SIZE_Y*COTE_CUBE
 				
 			#collisions
 			Vector2 amin = this.Min;
@@ -111,9 +111,9 @@ class Moteur:
 				
 				perso.position += mtd
 			
-			#spécifice race
-			if (perso.race == const.ELFE)
-				if (perso.jetpackEnergy < const.JETPACK_MAX
+			#spécifique race
+			if (perso.race == ELFE)
+				if (perso.jetpackEnergy < JETPACK_MAX
 					perso.jetpackEnergy += persoServ.JETPACK_REFILL
 
-		
+		return [perso.serialize() for perso in itertools.chain(nains, elfes)]
