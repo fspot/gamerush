@@ -37,8 +37,8 @@ class PersoServ:
 			self.pdv = 3
 			self.move_L = FloatVector(-self.AccCourse,0)
 			self.move_R = FloatVector(self.AccCourse,0)
-			self.hauteur = 10
-			self.largeur = 10
+			self.hauteur = 32
+			self.largeur = 32
 			self.position = SPAWN_NAIN
 
 	def bordDroit(self):

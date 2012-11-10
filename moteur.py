@@ -76,7 +76,7 @@ class Moteur:
 			for liste in self.carte.cubeGrid:
 				for cube in liste:
 					if cube is not None:
-						pdb.set_trace()
+						#pdb.set_trace()
 						left = (cube.borderLeft - perso.bordDroit());
 						right = (cube.borderRight - perso.position.x);
 						top = (cube.borderUp - perso.bordBas());

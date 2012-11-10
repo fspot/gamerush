@@ -8,10 +8,10 @@ from pdb import set_trace as rrr
 
 # globaux 
 FREQ = 30.0
-APPW, APPH = 1067, 600
+APPW, APPH = 320, 320
 
 _FOND = sf.Image()
-_FOND.LoadFromFile("./img/noir.bmp")
+_FOND.LoadFromFile("./img/1.bmp")
 FOND = sf.Sprite(_FOND)
 FOND.SetPosition(0,0) #(APPW/2, APPH/2)
 FOND.Resize(APPW, APPH)
