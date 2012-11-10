@@ -5,14 +5,16 @@ from twisted.internet import protocol, task, reactor
 from myprotocol import MyProtocol
 import msgpack, time
 from random import randint
+import moteur
 
 FREQ = 0.5  # nb de fois par secondes.
 
 class Client(MyProtocol):
-    def __init__(self, users):
+    def __init__(self, users, moteur):
         self.recu = ""  # buffer message recu
         self.size_remain = 0  # taille restante jusqu'a la fin du msg actuel
         self.users = users
+        self.moteur = moteur
         self.state = "connection"
 
     def connectionMade(self):
@@ -37,6 +39,7 @@ class Client(MyProtocol):
             self.handle_connection(msg)
 
     def handle_connection(self, msg):
+        self.perso = PersoServ()
         self.name = msg['n']
         self.race = msg['r']
         self.users[self.name] = self
@@ -46,9 +49,6 @@ class Client(MyProtocol):
         msg['p'] = [randint(1,1000), randint(1,500)]  # position de pop
         msg['t'] = 'cr'  # création
         self.repeat(msg)
-        # for u in self.users.itervalues():
-        #     if u is not self:
-        #         self.write({'t':'cr', 'id':u.id})
 
     def handle_chat(self, msg):
         typ = msg['t']
@@ -56,42 +56,27 @@ class Client(MyProtocol):
             print 'input', repr(msg)
         elif typ == 'm':  # mousemove
             print 'mousemove', repr(msg)
-        # cheat = False
-        # if 'pos' in msg:  # check anti cheat sur la position
-        #     try:
-        #         map(int, msg['pos'])
-        #         assert len(msg['pos']) == 3
-        #         [self.x, self.y, self.z] = msg['pos']
-        #     except:
-        #         cheat = True
-        # if 'vie' in msg:  # check anti cheat sur la vie
-        #     try:
-        #         vie = int(msg['vie'])
-        #         assert vie <= 100
-        #         self.vie = vie
-        #     except:
-        #         cheat = True
-        # if not cheat:
-        #     msg['id'] = self.id
-        #     self.repeat(msg)
+
 
 class ClientFactory(protocol.Factory):
     users = {}
+    moteur = Moteur()
     t0 = time.time()
 
     def buildProtocol(self, addr):
-        return Client(self.users)
+        return Client(self.users, self.moteur)
 
     def tick(self):
         print '<elapsed time : {0}>'.format(time.time()-self.t0)
 
         # vérifier les collisions + faire bouger toutes les entités
         # msgs = (u.perso.infos() for u in self.users.itervalues())
+        msgs = self.moteur.tick()
 
         # broadcast des messages
-        for u in self.users.itervalues():
-            for dest in self.users.itervalues():
-                u.write({'t':'mj', 'id':u.id})
+        for m in msgs:
+            for u in self.users.itervalues():
+                u.write(msgs)
 
 def main():
     print '<reactor launched @ localhost:4577>'
