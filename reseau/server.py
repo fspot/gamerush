@@ -5,7 +5,9 @@ from twisted.internet import protocol, task, reactor
 from myprotocol import MyProtocol
 import msgpack, time
 from random import randint
-import moteur
+import moteur as motor
+from persoServ import PersoServ
+from c import *
 
 FREQ = 0.5  # nb de fois par secondes.
 
@@ -39,14 +41,13 @@ class Client(MyProtocol):
             self.handle_connection(msg)
 
     def handle_connection(self, msg):
-        self.perso = PersoServ()
+        self.perso = self.moteur.creerPerso(msg['r'])
         self.name = msg['n']
-        self.race = msg['r']
         self.users[self.name] = self
         self.state = "chat"
-        self.id = randint(1,9999)
-        msg['id'] = self.id
-        msg['p'] = [randint(1,1000), randint(1,500)]  # position de pop
+        msg['id'] = self.perso.id
+        msg['x'] = self.perso.position.x
+        msg['y'] = self.perso.position.y
         msg['t'] = 'cr'  # création
         self.repeat(msg)
 
@@ -60,7 +61,7 @@ class Client(MyProtocol):
 
 class ClientFactory(protocol.Factory):
     users = {}
-    moteur = Moteur()
+    moteur = motor.Moteur()
     t0 = time.time()
 
     def buildProtocol(self, addr):
@@ -72,11 +73,12 @@ class ClientFactory(protocol.Factory):
         # vérifier les collisions + faire bouger toutes les entités
         # msgs = (u.perso.infos() for u in self.users.itervalues())
         msgs = self.moteur.tick()
+        print repr(msgs)
 
         # broadcast des messages
         for m in msgs:
             for u in self.users.itervalues():
-                u.write(msgs)
+                u.write(m)
 
 def main():
     print '<reactor launched @ localhost:4577>'

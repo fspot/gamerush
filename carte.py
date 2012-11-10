@@ -35,10 +35,11 @@ class Cube:
 class Carte:
 	def __init__(self):
 		reverseGrid =[
-			[1,0,1],
-			[1,0,1],
-			[1,0,1],
-			[1,0,1]
+			[0,0,0],
+			[0,0,0],
+			[0,0,0],
+			[0,0,0],
+			[0,0,0],
 		]
 		
 		grid = zip(*reverseGrid)

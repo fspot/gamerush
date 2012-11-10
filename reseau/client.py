@@ -8,6 +8,7 @@ from myprotocol import MyProtocol
 from random import randint
 from persoclient import PersoClient
 import time
+from c import *
 
 # le client :
 class Client(MyProtocol):
@@ -23,7 +24,7 @@ class Client(MyProtocol):
     def connectionMade(self):
         print "(>) Connected"
         nom = "joueur{0}".format(randint(1,999))
-        self.write({'n': nom, 'r':'n'})  # race : nain
+        self.write({'n': nom, 'r':NAIN})  # race : nain
     
     def connectionLost(self, reason):
         print "(<) Disconnected"    
@@ -41,6 +42,7 @@ class Client(MyProtocol):
         self.state = "chat"
 
     def handle_chat(self, msg):
+        print repr(msg)
         typ = msg['t']
         if typ == 'mj': # mise a jour d'un objet existant
             obj = self.glob['objets'][msg['id']]

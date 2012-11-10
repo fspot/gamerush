@@ -45,7 +45,6 @@ class Moteur:
 					jetpackEnergy -= JETPACK_CONSO
 				elif (perso.race == NAIN and perso.contact):
 					deplacement += perso.AccSaut
-			pdb.set_trace()
 			if (perso.input_q):
 				deplacement += perso.move_L
 				
@@ -59,7 +58,6 @@ class Moteur:
 					deplacement *= (perso.vMaxCourse/norme)
 				
 			perso.position += deplacement
-			pdb.set_trace()
 			#sortie ecran
 			if (perso.position.x < 0):
 				perso.position.x = 0.0
@@ -70,7 +68,6 @@ class Moteur:
 			if (perso.position.y > SIZE_Y*COTE_CUBE):
 				perso.position.y = SIZE_Y*COTE_CUBE
 				
-			pdb.set_trace()
 			#collisions
 			for liste in self.carte.cubeGrid:
 				for cube in liste:

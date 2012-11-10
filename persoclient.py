@@ -13,8 +13,8 @@ IMG['fifo'].LoadFromFile("./img/fifi.png")
 
 class PersoClient(object):
 	def __init__(self, msg):
-		self.x = msg['p'][0]
-		self.y = msg['p'][1]
+		self.x = msg['x']
+		self.y = msg['y']
 		self.id = msg['id']
 		self.race = msg['r']
 		self.nom = msg['n']
