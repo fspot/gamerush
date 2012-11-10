@@ -32,8 +32,8 @@ class PersoServ:
 		elif (race == NAIN):
 			self.vMaxCourse = 5
 			self.AccCourse = 3
-			self.AccSaut = FloatVector(0,-10)
-			self.Frot = 0.3
+			self.AccSaut = FloatVector(0,-100)
+			self.Frot = 0.5
 			self.pdv = 3
 			self.move_L = FloatVector(-self.AccCourse,0)
 			self.move_R = FloatVector(self.AccCourse,0)
