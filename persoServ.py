@@ -4,8 +4,8 @@ from c import *
 class PersoServ:
 	idcount = 0
 	def __init__(self, race):
-		self.id = idcount
-		idcount += 1
+		self.id = PersoServ.idcount
+		PersoServ.idcount += 1
 		self.race = race
 		self.contact = None
 		self.vitesse = FloatVector(0.0,0.0)
