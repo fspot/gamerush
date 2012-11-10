@@ -3,9 +3,12 @@
 
 from PySFML import sf
 
+_IMG = ['nain1', 'nain2']
+
 IMG = {
 	'fifi': sf.Image(),
 	'fifo': sf.Image(),
+
 }
 
 IMG['fifi'].LoadFromFile("./img/fifi.png")
