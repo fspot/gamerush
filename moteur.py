@@ -64,12 +64,12 @@ class Moteur:
 			#sortie ecran
 			if (perso.position.x < 0):
 				perso.position.x = 0.0
-			if (perso.position.x > SIZE_X*COTE_CUBE):
-				perso.position.x = SIZE_X*COTE_CUBE
+			if (perso.bordDroit > SIZE_X*COTE_CUBE):
+				perso.position.x = (SIZE_X-1)*COTE_CUBE
 			if (perso.position.y < 0):
 				perso.position.y = 0.0
-			if (perso.position.y > SIZE_Y*COTE_CUBE):
-				perso.position.y = SIZE_Y*COTE_CUBE
+			if (perso.position.bordBas > SIZE_Y*COTE_CUBE):
+				perso.position.y = (SIZE_Y-1)*COTE_CUBE
 				
 			print '3',perso.position.x
 			#collisions
@@ -110,8 +110,10 @@ class Moteur:
 
 							if abs(mtd.x) < abs(mtd.y):
 								mtd.y = 0
+								perso.vitesse.x=0
 							else:
 								mtd.x = 0
+								perso.vitesse.y=0
 	
 							perso.position += mtd
 
