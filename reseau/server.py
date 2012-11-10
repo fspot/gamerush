@@ -49,7 +49,17 @@ class Client(MyProtocol):
         msg['x'] = self.perso.position.x
         msg['y'] = self.perso.position.y
         msg['t'] = 'cr'  # création
-        self.repeat(msg)
+        self.repeat(msg) # communiquer mon apparition aux autres
+        for u in self.users.itervalues(): # ME communiquer les autres.
+            self.write({
+                'id': u.perso.id,
+                'r': u.perso.race,
+                'x': u.perso.position.x,
+                'y': u.perso.position.y,
+                't': 'cr',
+                'n': self.name,
+            })
+
 
     def handle_chat(self, msg):
         typ = msg['t']

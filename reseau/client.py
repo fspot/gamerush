@@ -45,7 +45,10 @@ class Client(MyProtocol):
         print repr(msg)
         typ = msg['t']
         if typ == 'mj': # mise a jour d'un objet existant
-            obj = self.glob['objets'][msg['id']]
+            try:
+                obj = self.glob['objets'][msg['id']]
+            except:
+                import pdb; pdb.set_trace()
             obj.modify(msg)
         elif typ == 'cr': # création d'un nouvel objet
             self.glob['objets']['id'] = PersoClient(msg)
