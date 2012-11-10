@@ -37,27 +37,32 @@ class Moteur:
 		for perso in itertools.chain(self.nains, self.elfes):
 			
 			#mouvement
-			deplacement = perso.vitesse + GRAVITE
+			acc = FloatVector(0,0)
+			acc += GRAVITE
 			
 			if (perso.input_z):
 				if (perso.race == ELFE and perso.jetpackEnergy > 0):
-					deplacement += perso.AccSaut
+					acc += perso.AccSaut
 					jetpackEnergy -= JETPACK_CONSO
 				elif (perso.race == NAIN and perso.contact):
-					deplacement += perso.AccSaut
+					acc += perso.AccSaut
+			pdb.set_trace()
 			if (perso.input_q):
-				deplacement += perso.move_L
+				acc += perso.move_L
 				
 			if (perso.input_d):
-				deplacement += perso.move_R
+				acc += perso.move_R
 				
+			perso.vitesse += acc
+
 			if (perso.contact):
-				deplacement += -perso.Frot*deplacement
-				norme = deplacement.Norm()
+				perso.vitesse += -perso.Frot*perso.vitesse
+				norme = perso.vitesse.Norm()
 				if (norme > perso.vMaxCourse):
-					deplacement *= (perso.vMaxCourse/norme)
+					perso.vitesse *= (perso.vMaxCourse/norme)
 				
-			perso.position += deplacement
+			perso.position += perso.vitesse
+			pdb.set_trace()
 			#sortie ecran
 			if (perso.position.x < 0):
 				perso.position.x = 0.0
@@ -68,6 +73,7 @@ class Moteur:
 			if (perso.position.y > SIZE_Y*COTE_CUBE):
 				perso.position.y = SIZE_Y*COTE_CUBE
 				
+			pdb.set_trace()
 			#collisions
 			for liste in self.carte.cubeGrid:
 				for cube in liste:
