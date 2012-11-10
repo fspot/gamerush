@@ -1,4 +1,4 @@
- 
+
 import persoServ
 import carte
 import itertools
@@ -64,13 +64,18 @@ class Moteur:
 			#sortie ecran
 			if (perso.position.x < 0):
 				perso.position.x = 0.0
+				perso.vitesse.x=0
 			if (perso.bordDroit() > SIZE_X*COTE_CUBE):
 				perso.position.x = (SIZE_X-1)*COTE_CUBE
+				perso.vitesse.x=0
 			if (perso.position.y < 0):
 				perso.position.y = 0.0
+				perso.vitesse.y=0
 			if (perso.bordBas() > SIZE_Y*COTE_CUBE):
 				perso.position.y = (SIZE_Y-1)*COTE_CUBE
+				perso.vitesse.y=0
 				
+			newContact = False
 			print '3',perso.position.x
 			#collisions
 			for liste in self.carte.cubeGrid:
@@ -81,9 +86,9 @@ class Moteur:
 						right = (cube.borderRight - perso.position.x);
 						top = (cube.borderUp - perso.bordBas());
 						bottom = (cube.borderDown - perso.position.y);
-						
 			 
 						if not (left > 0 or right < 0 or top > 0 or bottom < 0):
+							newContact = True
 							mtd = FloatVector(0.0,0.0)
 							print 'a',mtd.x,mtd.y
 							if abs(left) < right:
@@ -114,17 +119,18 @@ class Moteur:
 							else:
 								mtd.x = 0
 								perso.vitesse.y=0
-							perso.contact = True
 							perso.position += mtd
 						else:
 							perso.contact = False
 
-			print '5',perso.position.x
+
+
 			#specifique race
 			if (perso.race == ELFE):
 				if perso.jetpackEnergy < JETPACK_MAX:
 					perso.jetpackEnergy += JETPACK_REFILL
 
+			perso.contact = newContact
 		return [perso.serialize() for perso in itertools.chain(self.nains, self.elfes)]
 
 

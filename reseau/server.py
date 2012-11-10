@@ -9,7 +9,7 @@ import moteur as motor
 from persoServ import PersoServ
 from c import *
 
-FREQ = 30  # nb de fois par secondes.
+FREQ = 20  # nb de fois par secondes.
 
 class Client(MyProtocol):
     def __init__(self, users, moteur):
