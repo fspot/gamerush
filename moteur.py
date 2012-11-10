@@ -3,7 +3,7 @@ import persoServ
 import carte
 import itertools
 import libvect
-from const import *
+from c import *
 
 
 class Moteur:
@@ -69,51 +69,48 @@ class Moteur:
 				perso.position.y = SIZE_Y*COTE_CUBE
 				
 			#collisions
-			Vector2 amin = this.Min;
-			Vector2 amax = this.Max;
-			Vector2 bmin = other.Min;
-			Vector2 bmax = other.Max;
+			for liste in carte.cubeGrid:
+				for cube in liste:
+					left = (cube.borderLeft - perso.bordDroit);
+					right = (cube.borderRight - perso.position.x);
+					top = (borderUp - perso.bordBas);
+					bottom = (cube.borderDown - perso.position.y);
+					
+		 
+					if !(left > 0 || right < 0 || top > 0 || bottom < 0):
+						mtd = FloatVector(0.0,0.0)
+						if abs(left) < right:
+							mtd.x = left;
+						else:
+							mtd.x = right;
+						
+						if abs(top) < bottom:
+							mtd.y = top;
+						else:
+							mtd.y = bottom;
+						
 			
-			left = (cube.borderLeft - perso.bordDroit);
-			right = (cube.borderRight - perso.position.x);
-			top = (borderUp - perso.bordBas);
-			bottom = (cube.borderDown - perso.position.y);
-			
- 
-			if !(left > 0 || right < 0 || top > 0 || bottom < 0):
-				mtd = FloatVector(0.0,0.0)
-				if abs(left) < right:
-					mtd.x = left;
-				else:
-					mtd.x = right;
-				
-				if abs(top) < bottom:
-					mtd.y = top;
-				else:
-					mtd.y = bottom;
-				
-	
-				if abs(left) < right:
-					mtd.X = left
-				else:
-					mtd.X = right
-				
-				if abs(top) < bottom:
-					mtd.Y = top
-				else:
-					mtd.Y = bottom
-			
+						if abs(left) < right:
+							mtd.X = left
+						else:
+							mtd.X = right
+						
+						if abs(top) < bottom:
+							mtd.Y = top
+						else:
+							mtd.Y = bottom
+					
 
-				if abs(mtd.x) < abs(mtd.y):
-					mtd.y = 0
-				else:
-					mtd.x = 0
-				
-				perso.position += mtd
+						if abs(mtd.x) < abs(mtd.y):
+							mtd.y = 0
+						else:
+							mtd.x = 0
+						
+						perso.position += mtd
 			
 			#spécifique race
 			if (perso.race == ELFE)
 				if (perso.jetpackEnergy < JETPACK_MAX
-					perso.jetpackEnergy += persoServ.JETPACK_REFILL
+					perso.jetpackEnergy += JETPACK_REFILL
 
 		return [perso.serialize() for perso in itertools.chain(nains, elfes)]
