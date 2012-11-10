@@ -3,13 +3,9 @@
 
 from PySFML import sf
 
-_IMG = ['nain1', 'nain2']
-
-IMG = {
-	'fifi': sf.Image(),
-}
-
-IMG['fifi'].LoadFromFile("./img/man1.bmp")
+_IMG = ['nain1', 'nain2'] # doivent être des .png dans img/
+IMG = {nom: sf.Image() for nom in _IMG}
+for img in IMG:	IMG[img].LoadFromFile("./img/{0}.png".format(img)) # loadfromfiles
 
 class PersoClient(object):
 	def __init__(self, msg):
@@ -18,7 +14,7 @@ class PersoClient(object):
 		self.id = msg['id']
 		self.race = msg['r']
 		self.nom = msg['n']
-		self.spr = sf.Sprite(IMG['fifi'])
+		self.spr = sf.Sprite(IMG['nain1'])
 
 	def sprite(self):
 		self.spr.SetPosition(self.x, self.y)
