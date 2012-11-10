@@ -1,9 +1,11 @@
 #!/usr/env/python
 # -*- coding:utf-8 -*-
 
-from twisted.internet import protocol, reactor
+from twisted.internet import protocol, task, reactor
 from myprotocol import MyProtocol
-import msgpack
+import msgpack, time
+
+FREQ = 5.0
 
 class Client(MyProtocol):
     def __init__(self, users):
@@ -19,11 +21,11 @@ class Client(MyProtocol):
         if self.state == "chat":
             del self.users[self.name]
         print '(-) 1 Quit'
+        self.repeat({'d':self.name})
 
     def repeat(self, msg):
         for u in self.users.values():
-            if u is not self:
-                u.write(msg)
+            u.write(msg)
 
     def handle(self, msg):
         print " # Rcv:", msg
@@ -33,16 +35,12 @@ class Client(MyProtocol):
             self.handle_connection(msg)
 
     def handle_connection(self, msg):
-        if 'name' in msg and msg['name']:
-            self.name = msg['name']
+        if 'n' in msg:
+            self.name = msg['n']
+            self.race = msg['r']
             self.users[self.name] = self
             self.state = "chat"
-            self.id = len(self.users)
-            msg["id"] = self.id
             self.repeat(msg)
-            for u in self.users.values():
-                if u is not self:
-                    self.write({'name':u.name, 'id':u.id})
 
     def handle_chat(self, msg):
         cheat = False
@@ -64,13 +62,30 @@ class Client(MyProtocol):
             msg['id'] = self.id
             self.repeat(msg)
 
-
 class ClientFactory(protocol.Factory):
     users = {}
+    t0 = time.time()
+
     def buildProtocol(self, addr):
         return Client(self.users)
 
-if __name__ == '__main__':
+    def tick(self):
+        print '<elapsed time : {0}>'.format(time.time()-self.t0)
+
+        # vérifier les collisions + faire bouger toutes les entités
+        # msgs = (u.perso.infos() for u in self.users.itervalues())
+
+        # broadcast des messages
+        for u in self.users.itervalues():
+            u.write({'msg':'coucou'})
+
+def main():
     print '<reactor launched @ localhost:4577>'
-    reactor.listenTCP(4577, ClientFactory())
+    factory = ClientFactory()
+    reactor.listenTCP(4577, factory)
+    l = task.LoopingCall(factory.tick)
+    l.start(1.0/FREQ) # 30x par secondes.
     reactor.run()
+
+if __name__ == '__main__':
+    main()

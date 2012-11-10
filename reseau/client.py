@@ -13,28 +13,36 @@ class Client(MyProtocol):
     def __init__(self):
         self.recu = ""  # buffer message recu
         self.size_remain = 0  # taille restante jusqu'a la fin du msg actuel
-        self.num = 3
 
     def connectionMade(self):
         print "(>) Connected"
-        nom = "Lu" * randint(1,9)
-        self.write({'name': nom})
+        nom = "joueur{0}".format(randint(1,999))
+        self.write({'n': nom, 'r':'n'})  # race : nain
     
     def connectionLost(self, reason):
         print "(<) Disconnected"    
     
     def handle(self, msg):
         print " # Rcv:", msg
-        if self.num:
-            self.num -= 1
-            vie = int(self.num*50)
-            self.write({'vie':vie})
+
+    def send_input(self, inp, down):
+        # inp should be in : 'z', 'q', 'd', 'cg', 'cd'
+        # espace == 'z'
+        pass
+
+    def send_mousemove(self, x, y):
+        # envoie au serveur un angle entre la souris et le centre du perso
+        # si ça fait longtemps qu'on ne l'a pas envoyé
+        pass
 
 class ClientFactory(Factory):
     def buildProtocol(self, addr):
         return Client()
 
-if __name__ == '__main__':
+def fct_reseau():
     endpoint = TCP4ClientEndpoint(reactor, "127.0.0.1", 4577)
     endpoint.connect(ClientFactory())
     reactor.run()
+
+if __name__ == '__main__':
+    fct_reseau()
