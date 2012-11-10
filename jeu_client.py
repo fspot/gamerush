@@ -7,7 +7,7 @@ from PySFML import sf
 from pdb import set_trace as rrr
 
 # globaux 
-FREQ = 10.0
+FREQ = 30.0
 APPW, APPH = 1067, 600
 
 _FOND = sf.Image()

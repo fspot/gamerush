@@ -19,10 +19,13 @@ class PersoClient(object):
 		self.race = msg['r']
 		self.nom = msg['n']
 		self.spr = sf.Sprite(IMG['fifi'])
-		self.spr.SetPosition(self.x, self.y)
 
 	def sprite(self):
+		self.spr.SetPosition(self.x, self.y)
 		return self.spr
 
 	def modify(self, msg):
 		print "(@) I am updating myself, I'm", self.id, msg
+		self.x = msg['x']
+		self.y = msg['y']
+

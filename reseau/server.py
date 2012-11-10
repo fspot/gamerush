@@ -55,6 +55,7 @@ class Client(MyProtocol):
         typ = msg['t']
         if typ == 'i':  # input
             print 'input', repr(msg)
+            
         elif typ == 'm':  # mousemove
             print 'mousemove', repr(msg)
 
