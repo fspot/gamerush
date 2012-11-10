@@ -1,6 +1,5 @@
 import libvect
-import const
-
+from const import *
 
 class PersoServ:
 	def __init__(self, race, spawn):

@@ -1,5 +1,4 @@
-import const
-
+from const import *
 
 class Cube:
 	def __init__(self, posX, posY, h=False, b=False, g=False, d=False):

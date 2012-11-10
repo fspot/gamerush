@@ -46,6 +46,9 @@ class Client(MyProtocol):
         msg['p'] = [randint(1,1000), randint(1,500)]  # position de pop
         msg['t'] = 'cr'  # création
         self.repeat(msg)
+        # for u in self.users.itervalues():
+        #     if u is not self:
+        #         self.write({'t':'cr', 'id':u.id})
 
     def handle_chat(self, msg):
         typ = msg['t']

@@ -3,7 +3,7 @@ import persoServ
 import carte
 import itertools
 import libvect
-import const
+from const import *
 
 
 class Moteur:
