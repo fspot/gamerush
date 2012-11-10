@@ -41,32 +41,34 @@ class Carte:
 			[1,0,1]
 		]
 		
-		self.grid = zip(*reverseGrid)
+		grid = zip(*reverseGrid)
+		print repr(grid)
 		
 		col = {}
 		lig = {}
 		
-		cubeGrid = [[None for j in range(SIZE_Y)] for i in range(SIZE_X)]
+		self.cubeGrid = [[None for j in range(SIZE_Y)] for i in range(SIZE_X)]
+		print repr(self.cubeGrid)
 
 		
 		for i in range(0,SIZE_X):
-			for i in range(0,SIZE_Y):
-				if i-1<0 or grid[i-1,j]:
+			for j in range(0,SIZE_Y):
+				if i-1<0 or grid[i-1][j]:
 					g=True
 				else:
 					g=False
 					
-				if i+1>=SIZE_X or grid[i+1,j]:
+				if i+1>=SIZE_X or grid[i+1][j]:
 					d=True
 				else:
 					d=False
 					
-				if j-1<0 or grid[i,j-1]:
+				if j-1<0 or grid[i][j-1]:
 					h=True
 				else:
 					h=False
 					
-				if j+1>=SIZE_Y or grid[i,j+1]:
+				if j+1>=SIZE_Y or grid[i][j+1]:
 					b=True
 				else:
 					b=False
@@ -81,6 +83,6 @@ class Carte:
 					newCube = Cube(i,j,h,b,g,d)
 					col[j].append(newCube)										
 					lig[i].append(newCube)
-					cubeGrid[i][j] = newCube
+					self.cubeGrid[i][j] = newCube
 					
 
