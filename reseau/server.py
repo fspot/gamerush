@@ -4,8 +4,9 @@
 from twisted.internet import protocol, task, reactor
 from myprotocol import MyProtocol
 import msgpack, time
+from random import randint
 
-FREQ = 5.0
+FREQ = 0.5  # nb de fois par secondes.
 
 class Client(MyProtocol):
     def __init__(self, users):
@@ -23,44 +24,53 @@ class Client(MyProtocol):
         print '(-) 1 Quit'
         self.repeat({'d':self.name})
 
-    def repeat(self, msg):
+    def repeat(self, msg, including_me=True):
         for u in self.users.values():
-            u.write(msg)
+            if including_me or u is not self:
+                u.write(msg)
 
     def handle(self, msg):
-        print " # Rcv:", msg
+        #print " # Rcv:", msg
         if self.state == "chat":
             self.handle_chat(msg)
         elif self.state == "connection":
             self.handle_connection(msg)
 
     def handle_connection(self, msg):
-        if 'n' in msg:
-            self.name = msg['n']
-            self.race = msg['r']
-            self.users[self.name] = self
-            self.state = "chat"
-            self.repeat(msg)
+        self.name = msg['n']
+        self.race = msg['r']
+        self.users[self.name] = self
+        self.state = "chat"
+        self.id = randint(1,9999)
+        msg['id'] = self.id
+        msg['p'] = [randint(1,1000), randint(1,500)]  # position de pop
+        msg['t'] = 'cr'  # création
+        self.repeat(msg)
 
     def handle_chat(self, msg):
-        cheat = False
-        if 'pos' in msg:  # check anti cheat sur la position
-            try:
-                map(int, msg['pos'])
-                assert len(msg['pos']) == 3
-                [self.x, self.y, self.z] = msg['pos']
-            except:
-                cheat = True
-        if 'vie' in msg:  # check anti cheat sur la vie
-            try:
-                vie = int(msg['vie'])
-                assert vie <= 100
-                self.vie = vie
-            except:
-                cheat = True
-        if not cheat:
-            msg['id'] = self.id
-            self.repeat(msg)
+        typ = msg['t']
+        if typ == 'i':  # input
+            print 'input', repr(msg)
+        elif typ == 'm':  # mousemove
+            print 'mousemove', repr(msg)
+        # cheat = False
+        # if 'pos' in msg:  # check anti cheat sur la position
+        #     try:
+        #         map(int, msg['pos'])
+        #         assert len(msg['pos']) == 3
+        #         [self.x, self.y, self.z] = msg['pos']
+        #     except:
+        #         cheat = True
+        # if 'vie' in msg:  # check anti cheat sur la vie
+        #     try:
+        #         vie = int(msg['vie'])
+        #         assert vie <= 100
+        #         self.vie = vie
+        #     except:
+        #         cheat = True
+        # if not cheat:
+        #     msg['id'] = self.id
+        #     self.repeat(msg)
 
 class ClientFactory(protocol.Factory):
     users = {}
@@ -77,7 +87,8 @@ class ClientFactory(protocol.Factory):
 
         # broadcast des messages
         for u in self.users.itervalues():
-            u.write({'msg':'coucou'})
+            for dest in self.users.itervalues():
+                u.write({'t':'mj', 'id':u.id})
 
 def main():
     print '<reactor launched @ localhost:4577>'
