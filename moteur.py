@@ -114,8 +114,10 @@ class Moteur:
 							else:
 								mtd.x = 0
 								perso.vitesse.y=0
-	
+							perso.contact = True
 							perso.position += mtd
+						else:
+							perso.contact = False
 
 			print '5',perso.position.x
 			#specifique race
