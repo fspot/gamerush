@@ -7,12 +7,9 @@ _IMG = ['nain1', 'nain2']
 
 IMG = {
 	'fifi': sf.Image(),
-	'fifo': sf.Image(),
-
 }
 
-IMG['fifi'].LoadFromFile("./img/fifi.png")
-IMG['fifo'].LoadFromFile("./img/fifi.png")
+IMG['fifi'].LoadFromFile("./img/man1.bmp")
 
 class PersoClient(object):
 	def __init__(self, msg):

@@ -9,7 +9,7 @@ import moteur as motor
 from persoServ import PersoServ
 from c import *
 
-FREQ = 2  # nb de fois par secondes.
+FREQ = 30  # nb de fois par secondes.
 
 class Client(MyProtocol):
     def __init__(self, users, moteur):
@@ -56,17 +56,17 @@ class Client(MyProtocol):
         if typ == 'i':  # input
             print 'input', repr(msg)
             if msg['i'] in ('z', ' '):
-                self.input_z = msg['d']
+                self.perso.input_z = msg['d']
             elif msg['i'] == 's':
-                self.input_s = msg['d']
+                self.perso.input_s = msg['d']
             elif msg['i'] == 'q':
-                self.input_q = msg['d']
+                self.perso.input_q = msg['d']
             elif msg['i'] == 'd':
-                self.input_d = msg['d']
+                self.perso.input_d = msg['d']
             elif msg['i'] == 'cg':
-                self.input_mouseL = msg['d']
+                self.perso.input_mouseL = msg['d']
             elif msg['i'] == 'cd':
-                self.input_mouseR = msg['d']
+                self.perso.input_mouseR = msg['d']
         elif typ == 'm':  # mousemove
             print 'mousemove', repr(msg)
 

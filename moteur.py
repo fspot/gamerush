@@ -64,11 +64,11 @@ class Moteur:
 			#sortie ecran
 			if (perso.position.x < 0):
 				perso.position.x = 0.0
-			if (perso.bordDroit > SIZE_X*COTE_CUBE):
+			if (perso.bordDroit() > SIZE_X*COTE_CUBE):
 				perso.position.x = (SIZE_X-1)*COTE_CUBE
 			if (perso.position.y < 0):
 				perso.position.y = 0.0
-			if (perso.position.bordBas > SIZE_Y*COTE_CUBE):
+			if (perso.bordBas() > SIZE_Y*COTE_CUBE):
 				perso.position.y = (SIZE_Y-1)*COTE_CUBE
 				
 			print '3',perso.position.x
@@ -76,7 +76,7 @@ class Moteur:
 			for liste in self.carte.cubeGrid:
 				for cube in liste:
 					if cube is not None:
-						pdb.set_trace()
+						#pdb.set_trace()
 						left = (cube.borderLeft - perso.bordDroit());
 						right = (cube.borderRight - perso.position.x);
 						top = (cube.borderUp - perso.bordBas());
