@@ -18,6 +18,7 @@ class PersoServ:
 
 		if (race == ELFE):
 			self.vMaxCourse = 10
+			self.vMaxAirX = 10
 			self.AccCourse = 5
 			self.AccAir = 3
 			self.AccSaut = FloatVector(0,-3)
@@ -30,9 +31,10 @@ class PersoServ:
 			
 		elif (race == NAIN):
 			self.vMaxCourse = 5
+			self.vMaxAirX = 5
 			self.AccCourse = 3
 			self.AccAir = 2
-			self.AccSaut = FloatVector(0,-100)
+			self.AccSaut = FloatVector(0,-150)
 			self.Frot = 0.1
 			self.pdv = 3
 			self.hauteur = 37
@@ -57,7 +59,7 @@ class PersoServ:
 		dicti['y'] = self.position.y
 		dicti['id'] = self.id
 		dicti['t'] = 'mj'
-		if (len(anims) > 0):
+		if (len(self.anims) > 0):
 			dicti['an'] = min(self.anims)
 			self.anims = []
 		else :

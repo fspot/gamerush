@@ -84,6 +84,10 @@ class Moteur:
 				norme = perso.vitesse.Norm()
 				if (norme > perso.vMaxCourse):
 					perso.vitesse *= (perso.vMaxCourse/norme)
+			else:	#air
+				if (abs(perso.vitesse.x) > perso.vMaxAirX):
+					perso.vitesse.x *= (perso.vMaxAirX/abs(perso.vitesse.x))
+
 			perso.position += perso.vitesse
 			#sortie ecran
 			if (perso.position.x < 0):
@@ -91,7 +95,6 @@ class Moteur:
 				perso.vitesse.x=0
 			if (perso.bordDroit() > SIZE_X*COTE_CUBE):
 				perso.position.x = SIZE_X*COTE_CUBE - perso.largeur
-				print 'SORTIIIEEE'
 				perso.vitesse.x=0
 			if (perso.position.y < 0):
 				perso.position.y = 0.0
@@ -102,8 +105,13 @@ class Moteur:
 				
 			newContact = False
 			#collisions
-			for liste in self.carte.cubeGrid:
-				for cube in liste:
+
+			x_grid_start = int(perso.position.x//COTE_CUBE)
+			x_grid_end = int(perso.bordDroit()//COTE_CUBE)
+			y_grid_start = int(perso.position.y//COTE_CUBE)
+			y_grid_end = int(perso.bordBas()//COTE_CUBE)
+			for liste in self.carte.cubeGrid[x_grid_start:x_grid_end+1]:
+				for cube in liste[y_grid_start:y_grid_end+1]:
 					if cube is not None:
 						#pdb.set_trace()
 						left = (cube.borderLeft - perso.bordDroit());

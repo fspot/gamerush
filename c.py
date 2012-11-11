@@ -18,6 +18,7 @@ REVERSEGRID.append([1 for i in range(60)])
 REVERSEGRID.append([1 for i in range(60)])
 REVERSEGRID.append([1 for i in range(60)])
 REVERSEGRID.append([1 for i in range(60)])
+REVERSEGRID.append([1 for i in range(60)])
 
 SIZE_X = len(REVERSEGRID[0])
 print SIZE_X
@@ -30,4 +31,4 @@ JETPACK_MAX = 30
 
 SCALAIRE_BOUCLIER = -0.8
 
-A_MEURT, A_CRIE, A_DECOLE, A_VOLE, A_TOMBE, A_MARCHE = range(0,6)
+A_MEURT, A_CRIE, A_DECOLE, A_VOLE, A_TOMBE, A_MARCHE, A_TETE = range(7)
