@@ -35,7 +35,10 @@ class Vector:
 		return vdir[0]/n, vdir[1]/n
 
 	def angle(self):
-		return fctangle((1,0), self.vecteur_norme()) / math.pi * 180.0
+		a = fctangle((1,0), self.vecteur_norme()) / math.pi * 180.0
+		if self.vecteur_norme()[1]<0:
+			a = -a
+		return -a
 		
 		
 class FloatVector:

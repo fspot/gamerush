@@ -13,11 +13,11 @@ COOLDOWN_MAX = 20
 
 COTE_CUBE = 32
 
-REVERSEGRID = [[0 for i in range(80)] for j in range(28)]
-REVERSEGRID.append([1 for i in range(80)])
-REVERSEGRID.append([1 for i in range(80)])
-REVERSEGRID.append([1 for i in range(80)])
-REVERSEGRID.append([1 for i in range(80)])
+REVERSEGRID = [[0 for i in range(60)] for j in range(28)]
+REVERSEGRID.append([1 for i in range(60)])
+REVERSEGRID.append([1 for i in range(60)])
+REVERSEGRID.append([1 for i in range(60)])
+REVERSEGRID.append([1 for i in range(60)])
 
 SIZE_X = len(REVERSEGRID[0])
 SIZE_Y = len(REVERSEGRID)

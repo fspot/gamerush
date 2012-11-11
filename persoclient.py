@@ -5,7 +5,8 @@ from PySFML import sf
 import time
 from c import *
 
-A_MEURT, A_CRIE, A_DECOLE, A_VOLE, A_TOMBE, A_MARCHE = range(6)
+A_MEURT, A_CRIE, A_DECOLE, A_VOLE, A_TOMBE, A_MARCHE, A_TETE = range(7)
+GAUCHE, DROITE = True, False
 
 # doivent être des .png dans img/
 _IMG = [
@@ -13,6 +14,11 @@ _IMG = [
 	'n/b/b', 'n/b/m',  # bouclier et marteau
 ]
 _IMG += ['n/m/{}'.format(i) for i in range(1,11)]
+
+STATICOFS = {
+	'n/b/b': (13,25),
+	'n/b/m': (0,0),
+}
 
 IMG = {nom: sf.Image() for nom in _IMG}
 for img in IMG:	IMG[img].LoadFromFile("./img/{0}.png".format(img)) # loadfromfiles
@@ -38,8 +44,12 @@ NAINSEQ = {
 		{'d':0.3, 'i':IMG['n/2'], 'o':(0,0)},
 	],
 	A_MARCHE : [
-		{'d':0.3, 'i':IMG['n/1'], 'o':(0,0)},
-		{'d':0.3, 'i':IMG['n/2'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['n/1'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['n/2'], 'o':(0,0)},
+	],
+	A_TETE : [
+		{'d':0.4, 'i':IMG['n/1'], 'o':(0,0)},
+		{'d':0.4, 'i':IMG['n/2'], 'o':(0,0)},
 	],
 }
 
@@ -66,6 +76,7 @@ class PersoClient(object):
 		self.anim = A_MARCHE
 		self.anim_pos = 0
 		self.anim_max = 1
+		self.orientation = DROITE
 
 	def sprite(self):
 		if self.race == NAIN:
@@ -78,7 +89,12 @@ class PersoClient(object):
 				self.anim_pos = 0
 			self.t = time.time()
 			self.spr = sf.Sprite(anim['i'])
+			self.spr.FlipX(self.orientation)
 		self.spr.SetPosition(self.x - anim['o'][0], self.y - anim['o'][1])
+		if (self.orientation == GAUCHE and abs(self.alpha) < 90 or
+			self.orientation == DROITE and abs(self.alpha) > 90):
+			self.orientation = not self.orientation
+		self.spr.FlipX(self.orientation)
 		return self.spr
 
 	def modify(self, msg):
@@ -101,15 +117,15 @@ class PersoClient(object):
 		if not self.projo:
 			if self.race == NAIN:
 				arme = sf.Sprite(IMG['n/b/b'])
-				arme.SetPosition(self.x, self.y)
-				arme.Rotate(90)
+				arme.SetCenter(6,12)
+				arme.SetPosition(self.x + STATICOFS['n/b/b'][0], self.y + STATICOFS['n/b/b'][1])
+				arme.SetRotation(self.alpha)
 				return arme
 
 	def fuckdrawon(self, app):
 		spr = self.sprite()
 		w,h = spr.GetSize()
 		arm = self.arm()
-		arm.Move(w/2, h/2+15)
-		app.Draw(spr)
 		if arm is not None:
 			app.Draw(arm)
+		app.Draw(spr)

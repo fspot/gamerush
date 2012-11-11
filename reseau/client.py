@@ -31,7 +31,7 @@ class Client(MyProtocol):
         print "(<) Disconnected"    
     
     def handle(self, msg):
-        #print "### Rcv:", msg
+        print "### Rcv:", msg
         if self.state == "chat":
             self.handle_chat(msg)
         elif self.state == "connection":
@@ -46,11 +46,9 @@ class Client(MyProtocol):
     def handle_chat(self, msg):
         typ = msg['t']
         if typ == 'mj': # mise a jour d'un objet existant
-            print 'MAJ DE', msg['id']
-            try:
-                obj = self.glob['objets'][msg['id']]
-            except:
-                import pdb; pdb.set_trace()
+            obj = self.glob['objets'][msg['id']]
+            if obj is self.glob['moi'] and 'a' in msg: # on est maitre de notre angle, pas le réseau.
+                del msg['a']
             obj.modify(msg)
         elif typ == 'cr': # création d'un nouvel objet
             print 'CREATION DE', msg['id']
@@ -72,6 +70,7 @@ class Client(MyProtocol):
         if 'moi' in self.glob:
             posx, posy = self.glob['moi'].x, self.glob['moi'].y
             v = libvect.Vector(posx, x, posy, y)
+            print "posx, x, posy, y == ", posx, x, posy, y
             dx, dy = v.vecteur_norme()
             alpha = v.angle()
             self.glob['moi'].alpha = alpha

@@ -8,6 +8,7 @@ from random import randint
 import moteur as motor
 from persoServ import PersoServ
 from c import *
+import libvect
 
 FREQ = 25  # nb de fois par secondes.
 
@@ -62,7 +63,6 @@ class Client(MyProtocol):
                     'n': self.name,
                 })
 
-
     def handle_chat(self, msg):
         typ = msg['t']
         if typ == 'i':  # input
@@ -79,8 +79,9 @@ class Client(MyProtocol):
                 self.perso.input_mouseL = msg['d']
             elif msg['i'] == 'cd':
                 self.perso.input_mouseR = msg['d']
-        elif typ == 'm':  # mousemove
-            print 'mousemove', repr(msg)
+        elif typ == 'm':  # mousemove : il y a x,y et a.
+            self.perso.input_direction = libvect.FloatVector(msg['x'], msg['y'])
+            self.perso.input_angle = msg['a']
 
 class ClientFactory(protocol.Factory):
     users = {}

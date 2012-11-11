@@ -14,6 +14,7 @@ class PersoServ:
 		self.input_d = False
 		self.input_mouseL = False
 		self.input_mouseR = False
+		self.input_angle = False
 		self.anims = []
 
 		if (race == ELFE):
@@ -55,6 +56,7 @@ class PersoServ:
 		dicti['id'] = self.id
 		dicti['t'] = 'mj'
 		dicti['an'] = min(self.anims)
+		dicti['a'] = self.input_angle
 		anims = []
 		return dicti
 
