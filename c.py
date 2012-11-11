@@ -20,6 +20,7 @@ REVERSEGRID.append([1 for i in range(60)])
 REVERSEGRID.append([1 for i in range(60)])
 
 SIZE_X = len(REVERSEGRID[0])
+print SIZE_X
 SIZE_Y = len(REVERSEGRID)
 
 GRAVITE = FloatVector(0, 1)

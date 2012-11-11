@@ -30,7 +30,7 @@ GLOB = {}
 # code
 
 def boucle_de_rendu():
-    app = sf.RenderWindow(sf.VideoMode(APPW, APPH), "", sf.Style.Fullscreen)
+    app = sf.RenderWindow(sf.VideoMode(APPW, APPH), "")#, sf.Style.Fullscreen)
     view = sf.View(sf.FloatRect(0, 0, APPW, APPH))
     app.SetView(view)
     e = sf.Event()
