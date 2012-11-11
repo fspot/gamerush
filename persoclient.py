@@ -14,10 +14,12 @@ _IMG = [
 	'n/1', 'n/2', 'n/touched',  # normal
 	'n/b/b', 'n/b/m', 'e/b/1',  # bouclier et marteau
 	'e/a/1', 'e/v/1', 'e/v/2', # elfe qui vole et atterrit
+	'd/bibine', 'd/n', 'd/n2', 'd/pneu', # decor
 ]
 _IMG += ['n/m/{}'.format(i) for i in range(1,11)]
 _IMG += ['e/m/{}'.format(i) for i in range(1,9)]
 _IMG += ['e/c/{}'.format(i) for i in range(1,10)]
+_IMG += ['a/baf/b{}'.format(i) for i in range(1,5)]
 
 STATICOFS = {
 	'n/b/b': (13,18),
@@ -92,14 +94,10 @@ ELFESEQ = {
 
 STATICSEQ = {
 	DJ : [
-		{'d':0.2, 'i':IMG['e/m/1'], 'o':(0,0)},
-		{'d':0.2, 'i':IMG['e/m/2'], 'o':(0,0)},
-		{'d':0.2, 'i':IMG['e/m/3'], 'o':(0,0)},
-		{'d':0.2, 'i':IMG['e/m/4'], 'o':(0,0)},
-		{'d':0.2, 'i':IMG['e/m/5'], 'o':(0,0)},
-		{'d':0.2, 'i':IMG['e/m/6'], 'o':(0,0)},
-		{'d':0.2, 'i':IMG['e/m/7'], 'o':(0,0)},
-		{'d':0.2, 'i':IMG['e/m/8'], 'o':(0,-5)},
+		{'d':0.1, 'i':IMG['a/baf/b1'], 'o':(0,0)},
+		{'d':0.1, 'i':IMG['a/baf/b2'], 'o':(0,0)},
+		{'d':0.15, 'i':IMG['a/baf/b3'], 'o':(0,0)},
+		{'d':0.1, 'i':IMG['a/baf/b4'], 'o':(0,0)},
 	],
 }
 
@@ -127,20 +125,32 @@ class PersoClient(object):
 		if 'anim' in msg:
 			self.anim = msg['anim']
 		self.anim_pos = 0
-		self.anim_max = 1
+		if self.race == NAIN:
+			self.anim_max = 1
+		elif self.race == ELFE:
+			self.anim_max = 1
+		else:
+			self.anim_max = len(STATICSEQ[self.anim])
 		self.anim_finie = False
 		self.orientation = DROITE
 
 	def sprite(self):
-		if self.race == NAIN:
+		if self.projo:
+
+			return
+		elif self.race == NAIN:
 			seq = NAINSEQ
 		elif self.race == ELFE:
 			seq = ELFESEQ
 		else:
 			seq = STATICSEQ
+		print '!!',self.anim, self.anim_pos
 		anim = seq[self.anim][self.anim_pos]
+		print '!!',anim
+		print '!! >? ', time.time(), self.t, time.time()-self.t
 		if time.time() - self.t > anim['d']:
 			if self.anim_pos + 1 < self.anim_max:
+				print '!!', 'INC'
 				self.anim_pos += 1
 			else:
 				self.anim_pos = 0
@@ -153,6 +163,7 @@ class PersoClient(object):
 			self.orientation == DROITE and abs(self.alpha) > 90):
 			self.orientation = not self.orientation
 		self.spr.FlipX(self.orientation)
+		print 'ANIMPOS', self.anim_pos
 		return self.spr
 
 	def modify(self, msg):
@@ -163,13 +174,11 @@ class PersoClient(object):
 		if 'an' in msg: self.animate(msg['an'])
 
 	def animate(self, anim):
-		print 'ANIMATED CALLED WITH', anim
 		if self.race == NAIN:
 			seq = NAINSEQ
 		elif self.race == ELFE:
 			seq = ELFESEQ
 		if anim != self.anim and (self.anim not in (A_MEURT, A_DECOLE, A_CRIE) or self.anim_finie): # higher priority
-			print 'OK CHANGE !'
 			self.t = time.time()
 			self.anim = anim
 			self.anim_pos = 0

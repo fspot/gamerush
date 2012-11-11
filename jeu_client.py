@@ -55,7 +55,6 @@ def boucle_de_rendu():
                     reactor.stop()
                 else:
                     k = e.Key.Code
-                    print 'key', k
                     if k in KEYS:
                         if 'sock' in GLOB: GLOB['sock'].send_input(KEYS[k], True)
             elif e.Type == sf.Event.KeyReleased:
@@ -63,7 +62,6 @@ def boucle_de_rendu():
                     app.Close()
                 else:
                     k = e.Key.Code
-                    print 'key', k
                     if k in KEYS:
                         if 'sock' in GLOB: GLOB['sock'].send_input(KEYS[k], False)
             elif e.Type == sf.Event.MouseButtonPressed:
@@ -89,8 +87,9 @@ def boucle_de_rendu():
         app.Clear()  # effacement
         app.Draw(FOND)  # blit du fond
         if 'objets' in GLOB:
-            for obj in GLOB['objets'].itervalues():
+            for obj in GLOB['objets'].values():
                 obj.fuckdrawon(app)
+                print obj.id
         app.Display()  # affichage !
 
         # attente :
