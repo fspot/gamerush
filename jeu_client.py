@@ -6,7 +6,8 @@ import reseau.client as net
 from PySFML import sf
 from pdb import set_trace as rrr
 from twisted.internet import reactor
-import animenv, persoclient
+import animenv, persoclient, son
+import random
 
 # globaux 
 FREQ = 30.0
@@ -36,6 +37,11 @@ def boucle_de_rendu():
     view = sf.View(sf.FloatRect(0, 0, APPW, APPH))
     app.SetView(view)
     e = sf.Event()
+
+    #son
+    sound = random.choice(['ds1', 'ds2', 'ds3', 'elf'])
+    son.sounds[sound].SetLoop(True)
+    son.sounds[sound].Play()
 
     # animations statiques
     nbanim = 0

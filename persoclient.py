@@ -4,17 +4,18 @@
 from PySFML import sf
 import time
 from c import *
+import son
 
 A_MEURT, A_CRIE, A_DECOLE, A_VOLE, A_TOMBE, A_MARCHE, A_TETE = range(7)
 GAUCHE, DROITE = True, False
-DJ = 0
+BAFFLES, DJ, PLATINES = range(3)
 
 # doivent être des .png dans img/
 _IMG = [
 	'n/1', 'n/2', 'n/touched',  # normal
 	'n/b/b', 'n/b/m', 'e/b/1',  # bouclier et marteau
 	'e/a/1', 'e/v/1', 'e/v/2', # elfe qui vole et atterrit
-	'd/bibine', 'd/n', 'd/n2', 'd/pneu', 'd/be', 'd/bn' # decor
+	'd/bibine', 'd/n', 'd/n2', 'd/pneu', 'd/be', 'd/bn', 'd/dj1', 'd/dj2', 'd/pl1', 'd/pl2' # decor
 ]
 _IMG += ['n/m/{}'.format(i) for i in range(1,11)]
 _IMG += ['e/m/{}'.format(i) for i in range(1,9)]
@@ -41,7 +42,7 @@ NAINSEQ = {
 		{'d':0.2, 'i':IMG['n/m/7'], 'o':(0,0)},
 		{'d':0.2, 'i':IMG['n/m/8'], 'o':(0,-5)},
 		{'d':0.2, 'i':IMG['n/m/9'], 'o':(0,-15)},
-		{'d':0.2, 'i':IMG['n/m/10'], 'o':(0,-25)},
+		{'d':600, 'i':IMG['n/m/10'], 'o':(0,-25)},
 	],
 	A_CRIE : [
 		{'d':0.3, 'i':IMG['n/touched'], 'o':(0,0)},
@@ -96,11 +97,21 @@ ELFESEQ = {
 }
 
 STATICSEQ = {
-	DJ : [
+	BAFFLES : [
 		{'d':0.1, 'i':IMG['a/baf/b1'], 'o':(0,0)},
 		{'d':0.1, 'i':IMG['a/baf/b2'], 'o':(0,0)},
 		{'d':0.15, 'i':IMG['a/baf/b3'], 'o':(0,0)},
 		{'d':0.1, 'i':IMG['a/baf/b4'], 'o':(0,0)},
+	],
+
+	DJ : [
+		{'d':0.3, 'i':IMG['d/dj1'], 'o':(0,0)},
+		{'d':0.3, 'i':IMG['d/dj2'], 'o':(0,0)},
+	],
+
+	PLATINES : [
+		{'d':0.2, 'i':IMG['d/pl1'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['d/pl2'], 'o':(0,0)},
 	],
 }
 
@@ -191,6 +202,10 @@ class PersoClient(object):
 			self.anim_pos = 0
 			self.anim_finie = False
 			self.anim_max = len(seq[anim])
+			if self.race == ELFE and self.anim == A_DECOLE:
+				son.sounds['jet'].Play()
+			if self.race == ELFE and self.anim == A_MEURT:
+				son.sounds['plash'].Play()
 
 	def arm(self):
 		if not self.projo:
