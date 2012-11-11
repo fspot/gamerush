@@ -21,7 +21,7 @@ class PersoClient(object):
 		return self.spr
 
 	def modify(self, msg):
-		print "(@) I am updating myself, I'm", self.id, msg
+		#print "(@) I am updating myself, I'm", self.id, msg
 		self.x = msg['x']
 		self.y = msg['y']
 

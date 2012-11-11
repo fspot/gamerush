@@ -131,6 +131,7 @@ class Moteur:
 					perso.jetpackEnergy += JETPACK_REFILL
 
 			perso.contact = newContact
+		if len(self.nains) == 2: pdb.set_trace()
 		return [perso.serialize() for perso in itertools.chain(self.nains, self.elfes)]
 
 

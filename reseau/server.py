@@ -51,14 +51,15 @@ class Client(MyProtocol):
         msg['t'] = 'cr'  # création
         self.repeat(msg) # communiquer mon apparition aux autres
         for u in self.users.itervalues(): # ME communiquer les autres.
-            self.write({
-                'id': u.perso.id,
-                'r': u.perso.race,
-                'x': u.perso.position.x,
-                'y': u.perso.position.y,
-                't': 'cr',
-                'n': self.name,
-            })
+            if u is not self:
+                self.write({
+                    'id': u.perso.id,
+                    'r': u.perso.race,
+                    'x': u.perso.position.x,
+                    'y': u.perso.position.y,
+                    't': 'cr',
+                    'n': self.name,
+                })
 
 
     def handle_chat(self, msg):
@@ -94,10 +95,10 @@ class ClientFactory(protocol.Factory):
         # vérifier les collisions + faire bouger toutes les entités
         # msgs = (u.perso.infos() for u in self.users.itervalues())
         msgs = self.moteur.tick()
-        print repr(msgs)
 
         # broadcast des messages
         for m in msgs:
+            print '<MSG>', m
             for u in self.users.itervalues():
                 u.write(m)
 
