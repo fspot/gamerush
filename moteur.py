@@ -36,26 +36,29 @@ class Moteur:
 		return tir
 
 	def detruireTir(self, tir):
-		self.tirs.remove(tir)
+		if tir in self.tirs:
+			self.tirs.remove(tir)
+
 		self.factory.send_all({'t':'dl','id':tir.id})
 		
 		
 	def detruirePerso(self,perso):
 		if (perso.race == ELFE):
-			try:
+			if perso in self.elfes:
 				self.elfes.remove(perso)
-			except:
+			if perso in self.elfesMorts:
 				self.elfesMorts.remove(perso)
 
 		else:	#NAIN
-			try:
+			if perso in self.nains:
 				self.nains.remove(perso)
-			except:
+			if perso in self.nainsMorts:
 				self.nainsMorts.remove(perso)
 
 	def mortTemporaireElfe(self,elfe):
-		elfe.anims.append(A_MORT)
-		elfesMorts.append([REVIVE_COOLDOWN,elfe])
+		elfe.anims.append(A_MEURT)
+		self.elfes.remove(elfe)
+		self.elfesMorts.append([REVIVE_COOLDOWN,elfe])
 
 	def reviveElfes(self):
 		for elfeTTL in self.elfesMorts:
@@ -196,9 +199,6 @@ class Moteur:
 			perso.contact = newContact
 			if not newContact:
 				perso.anims.append(A_TOMBE)
-				print 'tombe'
-			else:
-				print 'pas tombe'
 
 		for tir in self.tirs:
 			#mvt tir
@@ -210,11 +210,11 @@ class Moteur:
 				if tir.race == ELFE:
 					#colision nains
 					for nain in self.nains:
-						if tir.pos.x > nain.x and tir.pos.x < nain.bordDroit() and tir.pos.y > nain.y and tir.pos.y < nain.bordBas():
+						if tir.pos.x > nain.position.x and tir.pos.x < nain.bordDroit() and tir.pos.y > nain.position.y and tir.pos.y < nain.bordBas():
 							if (nain.input_direction.scalaire(tir.dirr) < SCALAIRE_BOUCLIER):
 								#renvoi!
-								self.tirs.race = NAIN
-								tir.dirr = tir.dirr - 2*tir.dirr.scalaire(nain.input_direction)*nain.input_direction
+								tir.race = NAIN
+								tir.dirr = tir.dirr + (-2)*tir.dirr.scalaire(nain.input_direction)*nain.input_direction
 							else:
 								self.detruireTir(tir)
 								nain.pdv -= 1
@@ -222,13 +222,12 @@ class Moteur:
 								if nain.pdv == 0:
 									self.nains.remove(nain)
 									self.nainsMorts.append(nain)
-									nain.anims.append(A_MORT)
+									nain.anims.append(A_MEURT)
 				else: #tirreur = nain
 					for elfe in self.elfes:
-							if tir.pos.x > elfe.x and tir.pos.x < elfe.bordDroit() and tir.pos.y > elfe.y and tir.pos.y < elfe.bordBas():
-								if (perso.input_direction.scalaire(tir.dirr) < SCALAIRE_BOUCLIER):
-									mortTemporaireElfe(elfe)
-									self.detruireTir(tir)
+							if (tir.pos.x > elfe.position.x and tir.pos.x < elfe.bordDroit() and tir.pos.y > elfe.position.y and tir.pos.y < elfe.bordBas()):
+								self.mortTemporaireElfe(elfe)
+								self.detruireTir(tir)
 
 
 				#colision bloc
@@ -240,11 +239,11 @@ class Moteur:
 
 		for nain in self.nains:
 			for elfe in self.elfes:
-				if nain.bordDroit() < elfe.position.x and nain.bordBas() < elfe.y and nain.position.x > elfe.bordDroit() and nain.position.y > elfe.bordBas():
+				if not (nain.bordDroit() < elfe.position.x or nain.bordBas() < elfe.position.y or nain.position.x > elfe.bordDroit() or nain.position.y > elfe.bordBas()):
 					self.mortTemporaireElfe(elfe)
-					nain.anims.append(A_MARTEAU)
-
-		return [perso.serialize() for perso in itertools.chain(self.nains, self.elfes, self.tirs)]
+					nain.marteau = True
+		elfesMorts2 = [elfesTTL[1] for elfesTTL in self.elfesMorts]
+		return [perso.serialize() for perso in itertools.chain(self.nains, self.elfes, self.tirs, elfesMorts2, self.nainsMorts)]
 
 
 if __name__ == '__main__':
