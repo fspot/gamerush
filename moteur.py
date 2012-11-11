@@ -76,7 +76,6 @@ class Moteur:
 		self.reviveElfes()
 
 		for perso in itertools.chain(self.nains, self.elfes):
-			print perso.jetpackEnergy
 			#mouvement
 			acc = FloatVector(0,0)
 			acc += GRAVITE
