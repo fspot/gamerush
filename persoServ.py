@@ -56,6 +56,9 @@ class PersoServ:
 	def bordBas(self):
 		return self.position.y + self.hauteur
 
+	def lieuTir(self):
+		return FloatVector(self.position.x+self.largeur/2, self.position.y+self.hauteur/2-3)
+
 	def serialize(self):
 		dicti = {}
 		dicti['x'] = self.position.x
