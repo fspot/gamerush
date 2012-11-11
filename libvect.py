@@ -46,6 +46,9 @@ class FloatVector:
 	
 	def Norm(self):
 		return math.sqrt( self.x**2 + self.y**2 )
+
+	def scalaire(self, vect):
+		return (self.x*vect.x+self.y*vect.y)
 		
 		
 def addPts(p1,p2):

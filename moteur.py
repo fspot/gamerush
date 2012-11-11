@@ -10,19 +10,31 @@ import pdb
 class Moteur:
 	def __init__(self):
 		self.nains = []
+		self.nainsMorts = []
 		self.elfes = []
 		self.tirs = []
-		self.rebonds = []
 		self.carte = carte.Carte()
+		self.idcount = 0
 		
 	def creerPerso(self,race):
-		perso = persoServ.PersoServ(race)
+		perso = persoServ.PersoServ(race,self.idcount)
+		self.idcount += 1
 		if (race == ELFE):
 			self.elfes.append(perso)
 		else: #NAIN
 			self.nains.append(perso)
 			
 		return perso
+
+	def creerTir(self, pos, dirr, raceTirreur):
+		tir = Tir(pos, dirr, raceTirreur)
+		self.tirs.append(tir)
+		self.factory.send_all({'t':'cr','id':tir.id,'x':tir.pos.x,'y':tir.pos.y,'tr':tir.race})
+		return tir
+
+	def detruireTir(self, tir):
+		self.tir.remove(tir)
+		self.factory.send_all({'t':'dl','id':tir.id})
 		
 		
 	def detruirePerso(self,perso):
@@ -35,7 +47,6 @@ class Moteur:
 	def tick(self):
 
 		for perso in itertools.chain(self.nains, self.elfes):
-			print '0',perso.position.x
 			#mouvement
 			acc = FloatVector(0,0)
 			acc += GRAVITE
@@ -44,14 +55,19 @@ class Moteur:
 				if (perso.race == ELFE and perso.jetpackEnergy > 0):
 					acc += perso.AccSaut
 					jetpackEnergy -= JETPACK_CONSO
+					if (perso.contact):
+						perso.anims.append(A_DECOLE)
+					else:
+						perso.anims.append(A_VOLE)
 				elif (perso.race == NAIN and perso.contact):
 					acc += perso.AccSaut
 			if (perso.input_q):
 				acc += perso.move_L
+				perso.anims.append(A_COURS)
 				
 			if (perso.input_d):
-				acc += perso.move_R
-			print '1',perso.position.x	
+				acc += perso.move_R	
+				perso.anims.append(A_COURS)
 			perso.vitesse += acc
 
 			if (perso.contact):
@@ -59,7 +75,6 @@ class Moteur:
 				norme = perso.vitesse.Norm()
 				if (norme > perso.vMaxCourse):
 					perso.vitesse *= (perso.vMaxCourse/norme)
-			print '2',perso.position.x	
 			perso.position += perso.vitesse
 			#sortie ecran
 			if (perso.position.x < 0):
@@ -76,7 +91,6 @@ class Moteur:
 				perso.vitesse.y=0
 				
 			newContact = False
-			print '3',perso.position.x
 			#collisions
 			for liste in self.carte.cubeGrid:
 				for cube in liste:
@@ -130,7 +144,60 @@ class Moteur:
 				if perso.jetpackEnergy < JETPACK_MAX:
 					perso.jetpackEnergy += JETPACK_REFILL
 
+				if perso.cooldown > 0:
+					perso.cooldown -=1
+
+				if perso.input_mouseL and perso.cooldown <= 0 :
+					perso.cooldown = COOLDOWN_MAX
+					newTir = self.creerTir(perso.position, perso.dirr, ELFE)
+
+
 			perso.contact = newContact
+			if not newContact:
+				perso.anims.append(A_TOMBE)
+
+		for tir in self.tirs:
+			#mvt tir
+			tir.pos += tir.speed*tir.dirr
+			#sortie terrain
+			if tir.pos.x < 0 or tir.pos.x > SIZE_X*COTE_CUBE or tir.pos.y < 0 or tir.pos.y > SIZE_Y*COTE_CUBE:
+				self.detruireTir(tir)
+			else:
+				if tir.race == ELFE:
+					#colision nains
+					for nain in nains:
+						if tir.pos.x > nain.x and tir.pos.x < nain.bordDroit() and tir.pos.y > nain.y and tir.pos.y < nain.bordBas():
+							if (nain.input_direction.scalaire(tir.dirr) < SCALAIRE_BOUCLIER):
+								#renvoi!
+								self.tirs.race = NAIN
+								tir.dirr = tir.dirr - 2*tir.dirr.scalaire(nain.input_direction)*nain.input_direction
+							else:
+								self.detruireTir(tir)
+								nain.pdv -= 1
+								nain.anims.append(A_CRIE)
+								if nain.pdv == 0:
+									self.nains.remove(nain)
+									self.nainsMorts.append(nain)
+									nain.anims.append(A_MORT)
+				else: #tirreur = nain
+					for elfe in elfes:
+							if tir.pos.x > elfe.x and tir.pos.x < elfe.bordDroit() and tir.pos.y > elfe.y and tir.pos.y < elfe.bordBas():
+								if (perso.input_direction.scalaire(tir.dirr) < SCALAIRE_BOUCLIER):
+									elfe.anims.append(A_MORT)
+									self.detruireTir(tir)
+									#gerer elfes morts + repop A FAIIIIIRE
+
+
+				#colision bloc
+				x_grid = tir.pos.x//COTE_CUBE
+				y_grid = tir.pos.y//COTE_CUBE
+				if self.carte.cubeGrid[x_grid][y_grid] is not None:
+					self.detruireTir(tir)
+				
+
+
+
+
 		return [perso.serialize() for perso in itertools.chain(self.nains, self.elfes)]
 
 

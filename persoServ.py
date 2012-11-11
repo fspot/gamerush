@@ -2,10 +2,8 @@ import libvect
 from c import *
 
 class PersoServ:
-	idcount = 0
-	def __init__(self, race):
-		self.id = PersoServ.idcount
-		PersoServ.idcount += 1
+	def __init__(self, race, id):
+		self.id = id
 		self.race = race
 		self.contact = None
 		self.vitesse = FloatVector(0.0,0.0)
@@ -16,6 +14,7 @@ class PersoServ:
 		self.input_d = False
 		self.input_mouseL = False
 		self.input_mouseR = False
+		self.anims = []
 
 		if (race == ELFE):
 			self.vMaxCourse = 10
@@ -55,5 +54,8 @@ class PersoServ:
 		dicti['y'] = self.position.y
 		dicti['id'] = self.id
 		dicti['t'] = 'mj'
+		dicti['an'] = min(self.anims)
+		anims = []
 		return dicti
+
 
