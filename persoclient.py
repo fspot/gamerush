@@ -139,8 +139,8 @@ class PersoClient(object):
 
 	def sprite(self):
 		if self.projo:
-
-			return
+			self.spr = sf.Sprite(IMG['d/bibine'])
+			return self.spr
 		elif self.race == NAIN:
 			seq = NAINSEQ
 		elif self.race == ELFE:
@@ -202,4 +202,7 @@ class PersoClient(object):
 		arm = self.arm()
 		if arm is not None:
 			app.Draw(arm)
-		app.Draw(spr)
+		try:
+			app.Draw(spr)
+		except:
+			print '>>>>>>>>>>>>ID WAS', self.id
