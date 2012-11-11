@@ -63,11 +63,11 @@ class Moteur:
 					acc += perso.AccSaut
 			if (perso.input_q):
 				acc += perso.move_L
-				perso.anims.append(A_COURS)
+				perso.anims.append(A_MARCHE)
 				
 			if (perso.input_d):
 				acc += perso.move_R	
-				perso.anims.append(A_COURS)
+				perso.anims.append(A_MARCHE)
 			perso.vitesse += acc
 
 			if (perso.contact):

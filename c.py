@@ -2,7 +2,7 @@ from libvect import FloatVector
 
 ELFE, NAIN = 0, 1
 SPAWN_NAIN_X = 32
-SPAWN_NAIN_Y = 0
+SPAWN_NAIN_Y = 400
 SPAWN_ELFE_X = 64
 SPAWN_ELFE_Y = 0
 
@@ -13,18 +13,11 @@ COOLDOWN_MAX = 20
 
 COTE_CUBE = 32
 
-REVERSEGRID =[
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,1],
-	[1,1,1,1,1,1,1,1,1,1],
-]
+REVERSEGRID = [[0 for i in range(80)] for j in range(28)]
+REVERSEGRID.append([1 for i in range(80)])
+REVERSEGRID.append([1 for i in range(80)])
+REVERSEGRID.append([1 for i in range(80)])
+REVERSEGRID.append([1 for i in range(80)])
 
 SIZE_X = len(REVERSEGRID[0])
 SIZE_Y = len(REVERSEGRID)

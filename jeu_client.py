@@ -9,7 +9,7 @@ from twisted.internet import reactor
 
 # globaux 
 FREQ = 30.0
-APPW, APPH = 320, 320
+APPW, APPH = 1920, 1080
 
 _FOND = sf.Image()
 _FOND.LoadFromFile("./img/map.bmp")
@@ -30,7 +30,7 @@ GLOB = {}
 # code
 
 def boucle_de_rendu():
-    app = sf.RenderWindow(sf.VideoMode(APPW, APPH), "")#, sf.Style.Fullscreen)
+    app = sf.RenderWindow(sf.VideoMode(APPW, APPH), "", sf.Style.Fullscreen)
     view = sf.View(sf.FloatRect(0, 0, APPW, APPH))
     app.SetView(view)
     e = sf.Event()
@@ -81,8 +81,7 @@ def boucle_de_rendu():
         app.Draw(FOND)  # blit du fond
         if 'objets' in GLOB:
             for obj in GLOB['objets'].itervalues():
-                sprite = obj.sprite()
-                app.Draw(sprite)
+                obj.fuckdrawon(app)
         app.Display()  # affichage !
 
         # attente :

@@ -19,23 +19,27 @@ for img in IMG:	IMG[img].LoadFromFile("./img/{0}.png".format(img)) # loadfromfil
 
 NAINSEQ = {
 	A_MEURT : [
-		{'d':0.2, 'i':IMG['n/m/1']},
-		{'d':0.2, 'i':IMG['n/m/2']},
-		{'d':0.2, 'i':IMG['n/m/3']},
-		{'d':0.2, 'i':IMG['n/m/4']},
-		{'d':0.2, 'i':IMG['n/m/5']},
-		{'d':0.2, 'i':IMG['n/m/6']},
-		{'d':0.2, 'i':IMG['n/m/7']},
-		{'d':0.2, 'i':IMG['n/m/8']},
-		{'d':0.2, 'i':IMG['n/m/9']},
-		{'d':0.2, 'i':IMG['n/m/10']},
+		{'d':0.2, 'i':IMG['n/m/1'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['n/m/2'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['n/m/3'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['n/m/4'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['n/m/5'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['n/m/6'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['n/m/7'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['n/m/8'], 'o':(0,-5)},
+		{'d':0.2, 'i':IMG['n/m/9'], 'o':(0,-15)},
+		{'d':0.2, 'i':IMG['n/m/10'], 'o':(0,-25)},
 	],
 	A_CRIE : [
-		{'d':0.3, 'i':IMG['n/touched']},
+		{'d':0.3, 'i':IMG['n/touched'], 'o':(0,0)},
+	],
+	A_TOMBE : [
+		{'d':0.3, 'i':IMG['n/1'], 'o':(0,0)},
+		{'d':0.3, 'i':IMG['n/2'], 'o':(0,0)},
 	],
 	A_MARCHE : [
-		{'d':0.3, 'i':IMG['n/1']},
-		{'d':0.3, 'i':IMG['n/2']},
+		{'d':0.3, 'i':IMG['n/1'], 'o':(0,0)},
+		{'d':0.3, 'i':IMG['n/2'], 'o':(0,0)},
 	],
 }
 
@@ -65,14 +69,16 @@ class PersoClient(object):
 
 	def sprite(self):
 		if self.race == NAIN:
-			if time.time() - self.t > NAINSEQ[self.anim][self.anim_pos]['d']:
-				if self.anim_pos + 1 < self.anim_max:
-					self.anim_pos += 1
-				else:
-					self.anim_pos = 0
-				self.t = time.time()
-				self.spr = sf.Sprite(NAINSEQ[self.anim][self.anim_pos]['i'])
-		self.spr.SetPosition(self.x, self.y)
+			seq = NAINSEQ
+		anim = seq[self.anim][self.anim_pos]
+		if time.time() - self.t > anim['d']:
+			if self.anim_pos + 1 < self.anim_max:
+				self.anim_pos += 1
+			else:
+				self.anim_pos = 0
+			self.t = time.time()
+			self.spr = sf.Sprite(anim['i'])
+		self.spr.SetPosition(self.x - anim['o'][0], self.y - anim['o'][1])
 		return self.spr
 
 	def modify(self, msg):
@@ -90,3 +96,20 @@ class PersoClient(object):
 			self.anim = anim
 			self.anim_pos = 0
 			self.anim_max = len(seq[anim])
+
+	def arm(self):
+		if not self.projo:
+			if self.race == NAIN:
+				arme = sf.Sprite(IMG['n/b/b'])
+				arme.SetPosition(self.x, self.y)
+				arme.Rotate(90)
+				return arme
+
+	def fuckdrawon(self, app):
+		spr = self.sprite()
+		w,h = spr.GetSize()
+		arm = self.arm()
+		arm.Move(w/2, h/2+15)
+		app.Draw(spr)
+		if arm is not None:
+			app.Draw(arm)
