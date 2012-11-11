@@ -12,6 +12,8 @@ JETPACK_MAX = 30
 COOLDOWN_MAX = 20
 REVIVE_COOLDOWN = 100
 
+vMaxABSOLUE = 15 # max COTE_CUBE/2
+
 COTE_CUBE = 32
 
 REVERSEGRID = [[0 for i in range(60)] for j in range(28)]

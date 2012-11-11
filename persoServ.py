@@ -18,7 +18,7 @@ class PersoServ:
 		self.anims = []
 
 		if (race == ELFE):
-			self.vMaxCourse = 10
+			self.vMaxCourseX = 10
 			self.vMaxAirX = 10
 			self.AccCourse = 5
 			self.AccAir = 3
@@ -32,7 +32,7 @@ class PersoServ:
 			self.cooldown = 0
 			
 		elif (race == NAIN):
-			self.vMaxCourse = 5
+			self.vMaxCourseX = 5
 			self.vMaxAirX = 5
 			self.AccCourse = 3
 			self.AccAir = 2

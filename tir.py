@@ -10,10 +10,10 @@ class Tir:
 
 		self.speed = 7
 
-	def serialize():
+	def serialize(self):
 		dicti = {}
 		dicti['id'] = self.id
-		dicti['x'] = self.x
-		dicti['y'] = self.y
+		dicti['x'] = self.pos.x
+		dicti['y'] = self.pos.y
 		dicti['t'] = "mj"
 		return dicti
