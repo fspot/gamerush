@@ -4,7 +4,7 @@ import libvect
 class Tir:
 	def __init__(self, pos, dirr, raceTireur, idt):
 		self.id = idt
-		self.pos = pos	#CEEEENTRE!
+		self.pos = FloatVect(pos.x, pos.y)	#CEEEENTRE!
 		self.dirr = dirr
 		self.race = raceTireur
 
