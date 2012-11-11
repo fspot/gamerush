@@ -7,6 +7,7 @@ from c import *
 
 A_MEURT, A_CRIE, A_DECOLE, A_VOLE, A_TOMBE, A_MARCHE, A_TETE = range(7)
 GAUCHE, DROITE = True, False
+DJ = 0
 
 # doivent être des .png dans img/
 _IMG = [
@@ -89,6 +90,19 @@ ELFESEQ = {
 	],
 }
 
+STATICSEQ = {
+	DJ : [
+		{'d':0.2, 'i':IMG['e/m/1'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/2'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/3'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/4'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/5'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/6'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/7'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/8'], 'o':(0,-5)},
+	],
+}
+
 class PersoClient(object):
 	def __init__(self, msg):
 		self.x = msg['x']
@@ -110,6 +124,8 @@ class PersoClient(object):
 		self.spr = sf.Sprite(IMG['n/1'])
 		self.t = time.time()
 		self.anim = A_MARCHE
+		if 'anim' in msg:
+			self.anim = msg['anim']
 		self.anim_pos = 0
 		self.anim_max = 1
 		self.anim_finie = False
@@ -120,6 +136,8 @@ class PersoClient(object):
 			seq = NAINSEQ
 		elif self.race == ELFE:
 			seq = ELFESEQ
+		else:
+			seq = STATICSEQ
 		anim = seq[self.anim][self.anim_pos]
 		if time.time() - self.t > anim['d']:
 			if self.anim_pos + 1 < self.anim_max:
@@ -169,7 +187,6 @@ class PersoClient(object):
 
 	def fuckdrawon(self, app):
 		spr = self.sprite()
-		w,h = spr.GetSize()
 		arm = self.arm()
 		if arm is not None:
 			app.Draw(arm)
