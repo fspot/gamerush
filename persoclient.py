@@ -8,7 +8,7 @@ import son, random
 
 A_MEURT, A_CRIE, A_DECOLE, A_VOLE, A_TOMBE, A_MARCHE, A_TETE = range(7)
 GAUCHE, DROITE = True, False
-BAFFLES, DJ, PLATINES, NUAGE1, NUAGE2, PNEU, BIBINE = range(7)
+NUAGE1, BAFFLES, DJ, PLATINES, NUAGE2, PNEU, BIBINE = range(1000,1007)
 
 # doivent être des .png dans img/
 _IMG = [
@@ -97,6 +97,11 @@ ELFESEQ = {
 }
 
 STATICSEQ = {
+	NUAGE1 : [
+		{'d':600, 'i':IMG['d/n'], 'o':(0,0)},
+		{'d':600, 'i':IMG['d/n'], 'o':(0,0)},
+	],
+
 	BAFFLES : [
 		{'d':0.1, 'i':IMG['a/baf/b1'], 'o':(0,0)},
 		{'d':0.1, 'i':IMG['a/baf/b2'], 'o':(0,0)},
@@ -114,11 +119,8 @@ STATICSEQ = {
 		{'d':0.2, 'i':IMG['d/pl2'], 'o':(0,0)},
 	],
 
-	NUAGE1 : [
-		{'d':600, 'i':IMG['d/n'], 'o':(0,0)},
-	],
-
 	NUAGE2 : [
+		{'d':600, 'i':IMG['d/n2'], 'o':(0,0)},
 		{'d':600, 'i':IMG['d/n2'], 'o':(0,0)},
 	],
 
@@ -150,7 +152,7 @@ class PersoClient(object):
 			self.nom = ''
 		self.alpha = 0
 		self.spr = sf.Sprite(IMG['n/1'])
-		self.t = time.time()
+		self.t = 0
 		self.anim = A_MARCHE
 		if 'anim' in msg:
 			self.anim = msg['anim']
@@ -163,6 +165,7 @@ class PersoClient(object):
 			self.anim_max = len(STATICSEQ[self.anim])
 		self.anim_finie = False
 		self.orientation = DROITE
+		self.spr = self.sprite()
 
 	def sprite(self):
 		if self.projo:
