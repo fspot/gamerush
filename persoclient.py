@@ -11,8 +11,8 @@ GAUCHE, DROITE = True, False
 # doivent être des .png dans img/
 _IMG = [
 	'n/1', 'n/2', 'n/touched',  # normal
-	'n/b/b', 'n/b/m',  # bouclier et marteau
-	'e/a/1', 'e/v/1', 'e/v/2',
+	'n/b/b', 'n/b/m', 'e/b/1',  # bouclier et marteau
+	'e/a/1', 'e/v/1', 'e/v/2', # elfe qui vole et atterrit
 ]
 _IMG += ['n/m/{}'.format(i) for i in range(1,11)]
 _IMG += ['e/m/{}'.format(i) for i in range(1,9)]
@@ -21,6 +21,7 @@ _IMG += ['e/c/{}'.format(i) for i in range(1,10)]
 STATICOFS = {
 	'n/b/b': (13,18),
 	'n/b/m': (0,0),
+	'e/b/1': (0,0),
 }
 
 IMG = {nom: sf.Image() for nom in _IMG}
@@ -43,16 +44,15 @@ NAINSEQ = {
 		{'d':0.3, 'i':IMG['n/touched'], 'o':(0,0)},
 	],
 	A_TOMBE : [
-		{'d':0.3, 'i':IMG['n/1'], 'o':(0,0)},
-		{'d':0.3, 'i':IMG['n/2'], 'o':(0,0)},
+		{'d':0.3, 'i':IMG['n/touched'], 'o':(0,0)},
 	],
 	A_MARCHE : [
 		{'d':0.2, 'i':IMG['n/1'], 'o':(0,0)},
 		{'d':0.2, 'i':IMG['n/2'], 'o':(0,0)},
 	],
 	A_TETE : [
-		{'d':0.4, 'i':IMG['n/1'], 'o':(0,0)},
-		{'d':0.4, 'i':IMG['n/2'], 'o':(0,0)},
+		{'d':0.6, 'i':IMG['n/1'], 'o':(0,0)},
+		{'d':0.6, 'i':IMG['n/2'], 'o':(0,0)},
 	],
 }
 
@@ -112,17 +112,21 @@ class PersoClient(object):
 		self.anim = A_MARCHE
 		self.anim_pos = 0
 		self.anim_max = 1
+		self.anim_finie = False
 		self.orientation = DROITE
 
 	def sprite(self):
 		if self.race == NAIN:
 			seq = NAINSEQ
+		elif self.race == ELFE:
+			seq = ELFESEQ
 		anim = seq[self.anim][self.anim_pos]
 		if time.time() - self.t > anim['d']:
 			if self.anim_pos + 1 < self.anim_max:
 				self.anim_pos += 1
 			else:
 				self.anim_pos = 0
+				self.anim_finie = True
 			self.t = time.time()
 			self.spr = sf.Sprite(anim['i'])
 			self.spr.FlipX(self.orientation)
@@ -141,12 +145,17 @@ class PersoClient(object):
 		if 'an' in msg: self.animate(msg['an'])
 
 	def animate(self, anim):
+		print 'ANIMATED CALLED WITH', anim
 		if self.race == NAIN:
 			seq = NAINSEQ
-		if anim < self.anim: # higher priority
+		elif self.race == ELFE:
+			seq = ELFESEQ
+		if anim != self.anim and (self.anim not in (A_MEURT, A_DECOLE, A_CRIE) or self.anim_finie): # higher priority
+			print 'OK CHANGE !'
 			self.t = time.time()
 			self.anim = anim
 			self.anim_pos = 0
+			self.anim_finie = False
 			self.anim_max = len(seq[anim])
 
 	def arm(self):
