@@ -5,13 +5,14 @@ import threading, time, sys
 import reseau.client as net
 from PySFML import sf
 from pdb import set_trace as rrr
+from twisted.internet import reactor
 
 # globaux 
 FREQ = 30.0
 APPW, APPH = 320, 320
 
 _FOND = sf.Image()
-_FOND.LoadFromFile("./img/1.bmp")
+_FOND.LoadFromFile("./img/map.bmp")
 FOND = sf.Sprite(_FOND)
 FOND.SetPosition(0,0) #(APPW/2, APPH/2)
 FOND.Resize(APPW, APPH)
@@ -42,6 +43,7 @@ def boucle_de_rendu():
             elif e.Type == sf.Event.KeyPressed:
                 if e.Key.Code == sf.Key.Escape:
                     app.Close()
+                    reactor.stop()
                 else:
                     k = e.Key.Code
                     print 'key', k
@@ -71,7 +73,8 @@ def boucle_de_rendu():
                 if 'sock' in GLOB: GLOB['sock'].send_input(x, False)
             elif e.Type == sf.Event.MouseMoved:
                 x, y = app.ConvertCoords(e.MouseMove.X, e.MouseMove.Y)
-                if 'sock' in GLOB: GLOB['sock'].send_mousemove(x, y)
+                if 'sock' in GLOB and 'moi' in GLOB:
+                    GLOB['sock'].send_mousemove(x, y)
 
         # dessin
         app.Clear()  # effacement

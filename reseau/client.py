@@ -8,6 +8,7 @@ from myprotocol import MyProtocol
 from random import randint
 from persoclient import PersoClient
 import time
+import libvect
 from c import *
 
 # le client :
@@ -68,9 +69,14 @@ class Client(MyProtocol):
         # envoie au serveur un vecteur entre la souris et le centre du perso
         # si ça fait longtemps qu'on ne l'a pas envoyé
         t = time.time()
-        if t - self.lastmousemove > 0.900: # 20ms
-            if 'moi' in self.glob:
-                self.write({'x':x, 'y':y, 't':'m'})  # type : mousemove
+        if 'moi' in self.glob:
+            posx, posy = self.glob['moi'].x, self.glob['moi'].y
+            v = libvect.Vector(posx, x, posy, y)
+            dx, dy = v.vecteur_norme()
+            alpha = v.angle()
+            self.glob['moi'].alpha = alpha
+            if t - self.lastmousemove > 0.900: # 20ms
+                self.write({'x':dx, 'y':dy, 'a':alpha, 't':'m'})  # type : mousemove
             self.lastmousemove = t
 
 class ClientFactory(Factory):

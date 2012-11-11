@@ -1,6 +1,13 @@
 import math
 
+def dotproduct(v1, v2):
+	return sum((a*b) for a, b in zip(v1, v2))
 
+def fctlength(v):
+	return math.sqrt(dotproduct(v, v))
+
+def fctangle(v1, v2):
+	return math.acos(dotproduct(v1, v2) / (fctlength(v1) * fctlength(v2)))
 
 class Vector:
 	
@@ -21,8 +28,14 @@ class Vector:
 		
 	def Norm(self):
 		return math.sqrt( (self.x2-self.x1)**2 + (self.y2-self.y1)**2 )
-		
-		
+
+	def vecteur_norme(self):
+		vdir = self.Dir()
+		n = self.Norm()
+		return vdir[0]/n, vdir[1]/n
+
+	def angle(self):
+		return fctangle((1,0), self.vecteur_norme()) / math.pi * 180.0
 		
 		
 class FloatVector:
@@ -50,4 +63,3 @@ class FloatVector:
 		
 def addPts(p1,p2):
 	return (p1[0]+p2[0],p1[1]+p2[1])
-

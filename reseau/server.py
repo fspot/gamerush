@@ -9,7 +9,7 @@ import moteur as motor
 from persoServ import PersoServ
 from c import *
 
-FREQ = 20  # nb de fois par secondes.
+FREQ = 25  # nb de fois par secondes.
 
 class Client(MyProtocol):
     def __init__(self, users, moteur):
@@ -24,9 +24,10 @@ class Client(MyProtocol):
 
     def connectionLost(self, reason):
         if self.state == "chat":
+            self.repeat({'id':self.perso.id, 't': 'dl'})
+            self.moteur.detruirePerso(self.perso)
             del self.users[self.name]
         print '(-) 1 Quit'
-        self.repeat({'d':self.name})
 
     def repeat(self, msg, including_me=True):
         for u in self.users.values():
@@ -86,8 +87,15 @@ class ClientFactory(protocol.Factory):
     moteur = motor.Moteur()
     t0 = time.time()
 
+    def __init__(self):
+        ClientFactory.moteur.factory = self
+
     def buildProtocol(self, addr):
         return Client(self.users, self.moteur)
+
+    def send_all(self, msg):
+        for u in self.users.itervalues():
+            u.write(msg)
 
     def tick(self):
         print '<elapsed time : {0}>'.format(time.time()-self.t0)
