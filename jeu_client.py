@@ -6,6 +6,7 @@ import reseau.client as net
 from PySFML import sf
 from pdb import set_trace as rrr
 from twisted.internet import reactor
+import animenv, persoclient
 
 # globaux 
 FREQ = 30.0
@@ -26,6 +27,7 @@ KEYS = {
 }
 
 GLOB = {}
+GLOB['objets'] = {}
 
 # code
 
@@ -34,6 +36,13 @@ def boucle_de_rendu():
     view = sf.View(sf.FloatRect(0, 0, APPW, APPH))
     app.SetView(view)
     e = sf.Event()
+
+    # animations statiques
+    nbanim = 0
+    for anim in animenv.ANIMS:
+        nbanim -= 1
+        GLOB['objets'][nbanim] = persoclient.PersoClient(anim)
+
     while app.IsOpened():
         t0 = time.time()
         #print "window is still opened"

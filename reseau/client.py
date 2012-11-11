@@ -25,7 +25,7 @@ class Client(MyProtocol):
     def connectionMade(self):
         print "(>) Connected"
         nom = "joueur{0}".format(randint(1,999))
-        self.write({'n': nom, 'r':ELFE})  # race : nain
+        self.write({'n': nom, 'r':NAIN})  # race : nain
     
     def connectionLost(self, reason):
         print "(<) Disconnected"    
@@ -39,7 +39,7 @@ class Client(MyProtocol):
 
     def handle_connection(self, msg):
         self.glob['moi'] = PersoClient(msg)
-        self.glob['objets'] = {msg['id']: self.glob['moi']}
+        self.glob['objets'][msg['id']] = self.glob['moi']
         print 'MOI JE SUIS', msg['id']
         self.state = "chat"
 
