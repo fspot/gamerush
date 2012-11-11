@@ -40,11 +40,17 @@ class Moteur:
 		
 	def detruirePerso(self,perso):
 		if (perso.race == ELFE):
-			self.elfes.remove(perso)
-			self.elfesMorts.remove(perso)
+			try:
+				self.elfes.remove(perso)
+				self.elfesMorts.remove(perso)
+			except:
+				pass
 		else:	#NAIN
-			self.nains.remove(perso)
-			self.nainsMorts.remove(perso)
+			try:
+				self.nains.remove(perso)
+				self.nainsMorts.remove(perso)
+			except:
+				pass
 
 	def mortTemporaireElfe(self,elfe):
 		elfe.anims.append(A_MORT)

@@ -29,6 +29,7 @@ class PersoServ:
 			self.largeur = 10
 			self.position = FloatVector(SPAWN_ELFE_X,SPAWN_ELFE_Y)
 			self.input_direction = FloatVector(1,0)
+			self.cooldown = 0
 			
 		elif (race == NAIN):
 			self.vMaxCourse = 5
