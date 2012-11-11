@@ -87,7 +87,7 @@ class ClientFactory(Factory):
         return Client(self.glob)
 
 def fct_reseau(glob):
-    endpoint = TCP4ClientEndpoint(reactor, "192.168.3.1", 4577)
+    endpoint = TCP4ClientEndpoint(reactor, "127.0.0.1", 4577)
     factory = ClientFactory()
     factory.glob = glob
     endpoint.connect(factory)
