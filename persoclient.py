@@ -14,7 +14,7 @@ _IMG = [
 	'n/1', 'n/2', 'n/touched',  # normal
 	'n/b/b', 'n/b/m', 'e/b/1',  # bouclier et marteau
 	'e/a/1', 'e/v/1', 'e/v/2', # elfe qui vole et atterrit
-	'd/bibine', 'd/n', 'd/n2', 'd/pneu', # decor
+	'd/bibine', 'd/n', 'd/n2', 'd/pneu', 'd/be', 'd/bn' # decor
 ]
 _IMG += ['n/m/{}'.format(i) for i in range(1,11)]
 _IMG += ['e/m/{}'.format(i) for i in range(1,9)]
@@ -139,7 +139,10 @@ class PersoClient(object):
 
 	def sprite(self):
 		if self.projo:
-			self.spr = sf.Sprite(IMG['d/bibine'])
+			if self.race == ELFE:
+				self.spr = sf.Sprite(IMG['d/be'])
+			else:
+				self.spr = sf.Sprite(IMG['d/bn'])
 			self.spr.SetPosition(self.x, self.y)
 			return self.spr
 		elif self.race == NAIN:
@@ -195,6 +198,12 @@ class PersoClient(object):
 				arme = sf.Sprite(IMG['n/b/b'])
 				arme.SetCenter(6,12)
 				arme.SetPosition(self.x + STATICOFS['n/b/b'][0], self.y + STATICOFS['n/b/b'][1])
+				arme.SetRotation(self.alpha)
+				return arme
+			elif self.race == ELFE:
+				arme = sf.Sprite(IMG['e/b/1'])
+				arme.SetCenter(6,12)
+				arme.SetPosition(self.x + STATICOFS['e/b/1'][0], self.y + STATICOFS['e/b/1'][1])
 				arme.SetRotation(self.alpha)
 				return arme
 
