@@ -74,7 +74,7 @@ class Client(MyProtocol):
             dx, dy = v.vecteur_norme()
             alpha = v.angle()
             self.glob['moi'].alpha = alpha
-            if t - self.lastmousemove > 0.900: # 20ms
+            if t - self.lastmousemove > 0.010: # 20ms
                 self.write({'x':dx, 'y':dy, 'a':alpha, 't':'m'})  # type : mousemove
             self.lastmousemove = t
 
@@ -83,7 +83,7 @@ class ClientFactory(Factory):
         return Client(self.glob)
 
 def fct_reseau(glob):
-    endpoint = TCP4ClientEndpoint(reactor, "127.0.0.1", 4577)
+    endpoint = TCP4ClientEndpoint(reactor, "192.168.3.1", 4577)
     factory = ClientFactory()
     factory.glob = glob
     endpoint.connect(factory)
