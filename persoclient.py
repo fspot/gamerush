@@ -4,7 +4,7 @@
 from PySFML import sf
 import time
 from c import *
-import son
+import son, random
 
 A_MEURT, A_CRIE, A_DECOLE, A_VOLE, A_TOMBE, A_MARCHE, A_TETE = range(7)
 GAUCHE, DROITE = True, False
@@ -204,8 +204,14 @@ class PersoClient(object):
 			self.anim_max = len(seq[anim])
 			if self.race == ELFE and self.anim == A_DECOLE:
 				son.sounds['jet'].Play()
-			if self.race == ELFE and self.anim == A_MEURT:
+			elif self.race == ELFE and self.anim == A_MEURT:
 				son.sounds['plash'].Play()
+			elif self.race == NAIN and self.anim == A_MEURT:
+				s = random.choice(['m/a1', 'm/a2', 'm/a3'])
+				son.sounds[s].Play()
+			elif self.race == NAIN and self.anim == A_CRIE:
+				s = random.choice(['t/a1', 't/a2'])
+				son.sounds[s].Play()
 
 	def arm(self):
 		if not self.projo:
