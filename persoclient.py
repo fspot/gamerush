@@ -12,8 +12,11 @@ GAUCHE, DROITE = True, False
 _IMG = [
 	'n/1', 'n/2', 'n/touched',  # normal
 	'n/b/b', 'n/b/m',  # bouclier et marteau
+	'e/a/1', 'e/v/1', 'e/v/2',
 ]
 _IMG += ['n/m/{}'.format(i) for i in range(1,11)]
+_IMG += ['e/m/{}'.format(i) for i in range(1,9)]
+_IMG += ['e/c/{}'.format(i) for i in range(1,10)]
 
 STATICOFS = {
 	'n/b/b': (13,25),
@@ -50,6 +53,39 @@ NAINSEQ = {
 	A_TETE : [
 		{'d':0.4, 'i':IMG['n/1'], 'o':(0,0)},
 		{'d':0.4, 'i':IMG['n/2'], 'o':(0,0)},
+	],
+}
+
+ELFESEQ = {
+	A_MEURT : [
+		{'d':0.2, 'i':IMG['e/m/1'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/2'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/3'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/4'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/5'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/6'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/7'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/m/8'], 'o':(0,-5)},
+	],
+	A_TOMBE : [
+		{'d':0.3, 'i':IMG['e/a/1'], 'o':(0,0)},
+	],
+	A_MARCHE : [
+		{'d':0.2, 'i':IMG['e/c/1'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/c/2'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/c/3'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/c/4'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/c/5'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/c/6'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/c/7'], 'o':(0,0)},
+		{'d':0.2, 'i':IMG['e/c/8'], 'o':(0,-5)},
+		{'d':0.2, 'i':IMG['e/c/9'], 'o':(0,-5)},
+	],
+	A_DECOLE : [
+		{'d':0.4, 'i':IMG['e/v/1'], 'o':(0,0)},
+	],
+	A_VOLE : [
+		{'d':0.4, 'i':IMG['e/v/2'], 'o':(0,0)},
 	],
 }
 
