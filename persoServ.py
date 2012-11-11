@@ -27,7 +27,8 @@ class PersoServ:
 			self.move_R = FloatVector(AccCourse,0)
 			self.hauteur = 10
 			self.largeur = 10
-			self.position = SPAWN_ELFE
+			self.position = FloatVector(SPAWN_ELFE_X,SPAWN_ELFE_Y)
+			self.input_direction = FloatVector(1,0)
 			
 		elif (race == NAIN):
 			self.vMaxCourse = 5
@@ -39,7 +40,8 @@ class PersoServ:
 			self.move_R = FloatVector(self.AccCourse,0)
 			self.hauteur = 32
 			self.largeur = 32
-			self.position = SPAWN_NAIN
+			self.position = FloatVector(SPAWN_NAIN_X,SPAWN_NAIN_Y)
+			self.input_direction = FloatVector(-1,0)
 
 	def bordDroit(self):
 		return self.position.x + self.largeur
