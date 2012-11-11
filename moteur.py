@@ -198,7 +198,7 @@ class Moteur:
 
 				if perso.input_mouseL and perso.cooldown <= 0 :
 					perso.cooldown = COOLDOWN_MAX
-					newTir = self.creerTir(perso.position, perso.input_direction, ELFE)
+					newTir = self.creerTir(perso.lieuTir(), perso.input_direction, ELFE)
 
 
 		for tir in self.tirs:
