@@ -19,11 +19,10 @@ class PersoServ:
 		if (race == ELFE):
 			self.vMaxCourse = 10
 			self.AccCourse = 5
+			self.AccAir = 3
 			self.AccSaut = FloatVector(0,-3)
 			self.Frot = 0.3
 			self.jetpackEnergy = JETPACK_MAX
-			self.move_L = FloatVector(-AccCourse,0)
-			self.move_R = FloatVector(AccCourse,0)
 			self.hauteur = 10
 			self.largeur = 10
 			self.position = FloatVector(SPAWN_ELFE_X,SPAWN_ELFE_Y)
@@ -32,15 +31,19 @@ class PersoServ:
 		elif (race == NAIN):
 			self.vMaxCourse = 5
 			self.AccCourse = 3
+			self.AccAir = 2
 			self.AccSaut = FloatVector(0,-100)
 			self.Frot = 0.1
 			self.pdv = 3
-			self.move_L = FloatVector(-self.AccCourse,0)
-			self.move_R = FloatVector(self.AccCourse,0)
-			self.hauteur = 32
-			self.largeur = 32
+			self.hauteur = 37
+			self.largeur = 25
 			self.position = FloatVector(SPAWN_NAIN_X,SPAWN_NAIN_Y)
 			self.input_direction = FloatVector(-1,0)
+
+		self.move_L = FloatVector(-self.AccCourse,0)
+		self.move_R = FloatVector(self.AccCourse,0)
+		self.move_L_air = FloatVector(-self.AccAir,0)
+		self.move_R_air = FloatVector(self.AccAir,0)
 
 	def bordDroit(self):
 		return self.position.x + self.largeur
@@ -54,8 +57,11 @@ class PersoServ:
 		dicti['y'] = self.position.y
 		dicti['id'] = self.id
 		dicti['t'] = 'mj'
-		dicti['an'] = min(self.anims)
-		anims = []
+		if (len(anims) > 0):
+			dicti['an'] = min(self.anims)
+			self.anims = []
+		else :
+			dicti['an'] = A_TETE
 		return dicti
 
 

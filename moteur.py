@@ -61,13 +61,22 @@ class Moteur:
 						perso.anims.append(A_VOLE)
 				elif (perso.race == NAIN and perso.contact):
 					acc += perso.AccSaut
+
 			if (perso.input_q):
-				acc += perso.move_L
-				perso.anims.append(A_MARCHE)
+				if (perso.contact):
+					acc += perso.move_L
+					perso.anims.append(A_MARCHE)
+				else: #air
+					acc += perso.move_L_air
+
 				
 			if (perso.input_d):
-				acc += perso.move_R	
-				perso.anims.append(A_MARCHE)
+				if (perso.contact):
+					acc += perso.move_R	
+					perso.anims.append(A_MARCHE)
+				else: #air
+					acc += perso.move_R_air
+
 			perso.vitesse += acc
 
 			if (perso.contact):
@@ -81,13 +90,14 @@ class Moteur:
 				perso.position.x = 0.0
 				perso.vitesse.x=0
 			if (perso.bordDroit() > SIZE_X*COTE_CUBE):
-				perso.position.x = (SIZE_X-1)*COTE_CUBE
+				perso.position.x = SIZE_X*COTE_CUBE - perso.largeur
+				print 'SORTIIIEEE'
 				perso.vitesse.x=0
 			if (perso.position.y < 0):
 				perso.position.y = 0.0
 				perso.vitesse.y=0
 			if (perso.bordBas() > SIZE_Y*COTE_CUBE):
-				perso.position.y = (SIZE_Y-1)*COTE_CUBE
+				perso.position.y = SIZE_Y*COTE_CUBE - perso.largeur
 				perso.vitesse.y=0
 				
 			newContact = False
@@ -104,28 +114,23 @@ class Moteur:
 						if not (left > 0 or right < 0 or top > 0 or bottom < 0):
 							newContact = True
 							mtd = FloatVector(0.0,0.0)
-							print 'a',mtd.x,mtd.y
 							if abs(left) < right:
 								mtd.x = left;
 							else:
 								mtd.x = right;
-							print 'b',mtd.x,mtd.y
 							if abs(top) < bottom:
 								mtd.y = top;
 							else:
 								mtd.y = bottom;
-							print 'c',mtd.x,mtd.y
 				
 							if abs(left) < right:
 								mtd.X = left
 							else:
 								mtd.X = right
-							print 'd',mtd.x,mtd.y
 							if abs(top) < bottom:
 								mtd.Y = top
 							else:
 								mtd.Y = bottom
-							print 'e',mtd.x,mtd.y
 
 							if abs(mtd.x) < abs(mtd.y):
 								mtd.y = 0
@@ -153,6 +158,9 @@ class Moteur:
 			perso.contact = newContact
 			if not newContact:
 				perso.anims.append(A_TOMBE)
+				print 'tombe'
+			else:
+				print 'pas tombe'
 
 		for tir in self.tirs:
 			#mvt tir
