@@ -30,7 +30,7 @@ class Client(MyProtocol):
         print "(<) Disconnected"    
     
     def handle(self, msg):
-        print "### Rcv:", msg
+        #print "### Rcv:", msg
         if self.state == "chat":
             self.handle_chat(msg)
         elif self.state == "connection":
@@ -39,19 +39,23 @@ class Client(MyProtocol):
     def handle_connection(self, msg):
         self.glob['moi'] = PersoClient(msg)
         self.glob['objets'] = {msg['id']: self.glob['moi']}
+        print 'MOI JE SUIS', msg['id']
         self.state = "chat"
 
     def handle_chat(self, msg):
-        print repr(msg)
         typ = msg['t']
         if typ == 'mj': # mise a jour d'un objet existant
+            print 'MAJ DE', msg['id']
             try:
                 obj = self.glob['objets'][msg['id']]
             except:
                 import pdb; pdb.set_trace()
             obj.modify(msg)
         elif typ == 'cr': # création d'un nouvel objet
-            self.glob['objets']['id'] = PersoClient(msg)
+            print 'CREATION DE', msg['id']
+            # import pdb; pdb.set_trace()
+            self.glob['objets'][msg['id']] = PersoClient(msg)
+            # import pdb; pdb.set_trace()
         elif typ == 'dl': # delete
             del self.glob['objets'][msg['id']]
 

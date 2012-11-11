@@ -194,10 +194,6 @@ class Moteur:
 				if self.carte.cubeGrid[x_grid][y_grid] is not None:
 					self.detruireTir(tir)
 				
-
-
-
-
 		return [perso.serialize() for perso in itertools.chain(self.nains, self.elfes)]
 
 
