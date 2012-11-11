@@ -19,7 +19,7 @@ _IMG += ['e/m/{}'.format(i) for i in range(1,9)]
 _IMG += ['e/c/{}'.format(i) for i in range(1,10)]
 
 STATICOFS = {
-	'n/b/b': (13,25),
+	'n/b/b': (13,18),
 	'n/b/m': (0,0),
 }
 
