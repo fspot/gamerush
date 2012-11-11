@@ -90,6 +90,9 @@ ELFESEQ = {
 	A_VOLE : [
 		{'d':0.4, 'i':IMG['e/v/2'], 'o':(0,0)},
 	],
+	A_TETE : [
+		{'d':0.4, 'i':IMG['e/v/2'], 'o':(0,0)},
+	],
 }
 
 STATICSEQ = {

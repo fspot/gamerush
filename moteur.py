@@ -5,6 +5,7 @@ import itertools
 import libvect
 from c import *
 import pdb
+import tir as shoot
 
 
 class Moteur:
@@ -28,23 +29,29 @@ class Moteur:
 		return perso
 
 	def creerTir(self, pos, dirr, raceTirreur):
-		tir = Tir(pos, dirr, raceTirreur)
+		tir = shoot.Tir(pos, dirr, raceTirreur, self.idcount)
+		self.idcount += 1
 		self.tirs.append(tir)
-		self.factory.send_all({'t':'cr','id':tir.id,'x':tir.pos.x,'y':tir.pos.y,'tr':tir.race})
+		self.factory.send_all({'t':'cr','id':tir.id,'x':tir.pos.x,'y':tir.pos.y,'pr':tir.race})
 		return tir
 
 	def detruireTir(self, tir):
-		self.tir.remove(tir)
+		self.tirs.remove(tir)
 		self.factory.send_all({'t':'dl','id':tir.id})
 		
 		
 	def detruirePerso(self,perso):
 		if (perso.race == ELFE):
-			self.elfes.remove(perso)
-			self.elfesMorts.remove(perso)
+			try:
+				self.elfes.remove(perso)
+			except:
+				self.elfesMorts.remove(perso)
+
 		else:	#NAIN
-			self.nains.remove(perso)
-			self.nainsMorts.remove(perso)
+			try:
+				self.nains.remove(perso)
+			except:
+				self.nainsMorts.remove(perso)
 
 	def mortTemporaireElfe(self,elfe):
 		elfe.anims.append(A_MORT)
@@ -73,7 +80,7 @@ class Moteur:
 			if (perso.input_z):
 				if (perso.race == ELFE and perso.jetpackEnergy > 0):
 					acc += perso.AccSaut
-					jetpackEnergy -= JETPACK_CONSO
+					perso.jetpackEnergy -= JETPACK_CONSO
 					if (perso.contact):
 						perso.anims.append(A_DECOLE)
 					else:
@@ -100,12 +107,16 @@ class Moteur:
 
 			if (perso.contact):
 				perso.vitesse += -perso.Frot*perso.vitesse
-				norme = perso.vitesse.Norm()
-				if (norme > perso.vMaxCourse):
-					perso.vitesse *= (perso.vMaxCourse/norme)
+				if (abs(perso.vitesse.x) > perso.vMaxCourseX):
+					perso.vitesse.x *= (perso.vMaxCourseX/abs(perso.vitesse.x))
 			else:	#air
 				if (abs(perso.vitesse.x) > perso.vMaxAirX):
 					perso.vitesse.x *= (perso.vMaxAirX/abs(perso.vitesse.x))
+
+			#limitation absolue (max COTE_CUBE/2)
+			norme = perso.vitesse.Norm()
+			if (norme > vMaxABSOLUE):
+				perso.vitesse *= (vMaxABSOLUE/norme)
 
 			perso.position += perso.vitesse
 			#sortie ecran
@@ -179,7 +190,7 @@ class Moteur:
 
 				if perso.input_mouseL and perso.cooldown <= 0 :
 					perso.cooldown = COOLDOWN_MAX
-					newTir = self.creerTir(perso.position, perso.dirr, ELFE)
+					newTir = self.creerTir(perso.position, perso.input_direction, ELFE)
 
 
 			perso.contact = newContact
@@ -198,7 +209,7 @@ class Moteur:
 			else:
 				if tir.race == ELFE:
 					#colision nains
-					for nain in nains:
+					for nain in self.nains:
 						if tir.pos.x > nain.x and tir.pos.x < nain.bordDroit() and tir.pos.y > nain.y and tir.pos.y < nain.bordBas():
 							if (nain.input_direction.scalaire(tir.dirr) < SCALAIRE_BOUCLIER):
 								#renvoi!
@@ -213,7 +224,7 @@ class Moteur:
 									self.nainsMorts.append(nain)
 									nain.anims.append(A_MORT)
 				else: #tirreur = nain
-					for elfe in elfes:
+					for elfe in self.elfes:
 							if tir.pos.x > elfe.x and tir.pos.x < elfe.bordDroit() and tir.pos.y > elfe.y and tir.pos.y < elfe.bordBas():
 								if (perso.input_direction.scalaire(tir.dirr) < SCALAIRE_BOUCLIER):
 									mortTemporaireElfe(elfe)
@@ -221,8 +232,8 @@ class Moteur:
 
 
 				#colision bloc
-				x_grid = tir.pos.x//COTE_CUBE
-				y_grid = tir.pos.y//COTE_CUBE
+				x_grid = int(tir.pos.x//COTE_CUBE)
+				y_grid = int(tir.pos.y//COTE_CUBE)
 				if self.carte.cubeGrid[x_grid][y_grid] is not None:
 					self.detruireTir(tir)
 		
@@ -233,7 +244,7 @@ class Moteur:
 					self.mortTemporaireElfe(elfe)
 					nain.anims.append(A_MARTEAU)
 
-		return [perso.serialize() for perso in itertools.chain(self.nains, self.elfes)]
+		return [perso.serialize() for perso in itertools.chain(self.nains, self.elfes, self.tirs)]
 
 
 if __name__ == '__main__':
