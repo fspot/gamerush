@@ -1,8 +1,10 @@
 from libvect import FloatVector
 
 ELFE, NAIN = 0, 1
-SPAWN_NAIN = FloatVector(32,0.0)
-SPAWN_ELFE = FloatVector(0.0,0.0)
+SPAWN_NAIN_X = 32
+SPAWN_NAIN_Y = 0
+SPAWN_ELFE_X = 64
+SPAWN_ELFE_Y = 0
 
 JETPACK_REFILL = 0.5
 JETPACK_CONSO = 1
