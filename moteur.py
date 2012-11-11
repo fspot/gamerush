@@ -76,6 +76,7 @@ class Moteur:
 		self.reviveElfes()
 
 		for perso in itertools.chain(self.nains, self.elfes):
+			print perso.jetpackEnergy
 			#mouvement
 			acc = FloatVector(0,0)
 			acc += GRAVITE
@@ -183,8 +184,13 @@ class Moteur:
 						else:
 							perso.contact = False
 
+
+			perso.contact = newContact
+			if not newContact:
+				perso.anims.append(A_TOMBE)
+
 			#specifique race
-			if (perso.race == ELFE):
+			if perso.race == ELFE:
 				if perso.jetpackEnergy < JETPACK_MAX:
 					perso.jetpackEnergy += JETPACK_REFILL
 
@@ -195,10 +201,6 @@ class Moteur:
 					perso.cooldown = COOLDOWN_MAX
 					newTir = self.creerTir(perso.position, perso.input_direction, ELFE)
 
-
-			perso.contact = newContact
-			if not newContact:
-				perso.anims.append(A_TOMBE)
 
 		for tir in self.tirs:
 			#mvt tir

@@ -24,7 +24,7 @@ class PersoServ:
 			self.AccAir = 3
 			self.AccSaut = FloatVector(0,-3)
 			self.Frot = 0.3
-			self.jetpackEnergy = JETPACK_MAX
+			self.jetpackEnergy = int(JETPACK_MAX)
 			self.hauteur = 48
 			self.largeur = 30
 			self.position = FloatVector(SPAWN_ELFE_X,SPAWN_ELFE_Y)
