@@ -24,7 +24,7 @@ _IMG += ['a/baf/b{}'.format(i) for i in range(1,5)]
 STATICOFS = {
 	'n/b/b': (13,18),
 	'n/b/m': (0,0),
-	'e/b/1': (0,0),
+	'e/b/1': (13,22),
 }
 
 IMG = {nom: sf.Image() for nom in _IMG}

@@ -25,7 +25,7 @@ class Client(MyProtocol):
     def connectionMade(self):
         print "(>) Connected"
         nom = "joueur{0}".format(randint(1,999))
-        self.write({'n': nom, 'r':NAIN})  # race : nain
+        self.write({'n': nom, 'r':ELFE})  # race : nain
     
     def connectionLost(self, reason):
         print "(<) Disconnected"    
@@ -83,7 +83,7 @@ class ClientFactory(Factory):
         return Client(self.glob)
 
 def fct_reseau(glob):
-    endpoint = TCP4ClientEndpoint(reactor, "192.168.3.1", 4577)
+    endpoint = TCP4ClientEndpoint(reactor, "127.0.0.1", 4577)
     factory = ClientFactory()
     factory.glob = glob
     endpoint.connect(factory)
