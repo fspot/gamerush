@@ -42,6 +42,7 @@ class PersoServ:
 			self.largeur = 25
 			self.position = FloatVector(SPAWN_NAIN_X,SPAWN_NAIN_Y)
 			self.input_direction = FloatVector(-1,0)
+			self.marteau = False
 
 		self.move_L = FloatVector(-self.AccCourse,0)
 		self.move_R = FloatVector(self.AccCourse,0)
@@ -66,6 +67,11 @@ class PersoServ:
 			self.anims = []
 		else :
 			dicti['an'] = A_TETE
+
+		if (self.race == NAIN and self.marteau):
+			dicti['m'] = True
+			self.marteau = False
+
 		return dicti
 
 

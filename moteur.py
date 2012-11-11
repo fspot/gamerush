@@ -12,6 +12,7 @@ class Moteur:
 		self.nains = []
 		self.nainsMorts = []
 		self.elfes = []
+		self.elfesMorts = []
 		self.tirs = []
 		self.carte = carte.Carte()
 		self.idcount = 0
@@ -40,11 +41,29 @@ class Moteur:
 	def detruirePerso(self,perso):
 		if (perso.race == ELFE):
 			self.elfes.remove(perso)
+			self.elfesMorts.remove(perso)
 		else:	#NAIN
 			self.nains.remove(perso)
+			self.nainsMorts.remove(perso)
+
+	def mortTemporaireElfe(self,elfe):
+		elfe.anims.append(A_MORT)
+		elfesMorts.append([REVIVE_COOLDOWN,elfe])
+
+	def reviveElfes(self):
+		for elfeTTL in self.elfesMorts:
+			elfeTTL[0] -= 1
+			if elfeTTL[0] == 0:
+				self.elfesMorts.remove(elfeTTL)
+				self.elfes.append(elfeTTL[1])
+				elfeTTL[1].position = FloatVector(SPAWN_ELFE_X,SPAWN_ELFE_Y)
+
+
+
 
 			
 	def tick(self):
+		self.reviveElfes()
 
 		for perso in itertools.chain(self.nains, self.elfes):
 			#mouvement
@@ -197,9 +216,8 @@ class Moteur:
 					for elfe in elfes:
 							if tir.pos.x > elfe.x and tir.pos.x < elfe.bordDroit() and tir.pos.y > elfe.y and tir.pos.y < elfe.bordBas():
 								if (perso.input_direction.scalaire(tir.dirr) < SCALAIRE_BOUCLIER):
-									elfe.anims.append(A_MORT)
+									mortTemporaireElfe(elfe)
 									self.detruireTir(tir)
-									#gerer elfes morts + repop A FAIIIIIRE
 
 
 				#colision bloc
@@ -207,7 +225,14 @@ class Moteur:
 				y_grid = tir.pos.y//COTE_CUBE
 				if self.carte.cubeGrid[x_grid][y_grid] is not None:
 					self.detruireTir(tir)
-				
+		
+
+		for nain in self.nains:
+			for elfe in self.elfes:
+				if nain.bordDroit() < elfe.position.x and nain.bordBas() < elfe.y and nain.position.x > elfe.bordDroit() and nain.position.y > elfe.bordBas():
+					self.mortTemporaireElfe(elfe)
+					nain.anims.append(A_MARTEAU)
+
 		return [perso.serialize() for perso in itertools.chain(self.nains, self.elfes)]
 
 
