@@ -32,11 +32,11 @@ class PersoServ:
 			self.cooldown = 0
 			
 		elif (race == NAIN):
-			self.vMaxCourseX = 5
-			self.vMaxAirX = 5
+			self.vMaxCourseX = 7
+			self.vMaxAirX = 7
 			self.AccCourse = 3
 			self.AccAir = 2
-			self.AccSaut = FloatVector(0,-150)
+			self.AccSaut = FloatVector(0,-100)
 			self.Frot = 0.1
 			self.pdv = 3
 			self.hauteur = 37

@@ -8,7 +8,7 @@ class Tir:
 		self.dirr = dirr
 		self.race = raceTireur
 
-		self.speed = 14
+		self.speed = 20
 
 	def serialize(self):
 		dicti = {}
