@@ -4,11 +4,11 @@ import libvect
 class Tir:
 	def __init__(self, pos, dirr, raceTireur, idt):
 		self.id = idt
-		self.pos = FloatVect(pos.x, pos.y)	#CEEEENTRE!
+		self.pos = FloatVector(pos.x, pos.y)	#CEEEENTRE!
 		self.dirr = dirr
 		self.race = raceTireur
 
-		self.speed = 1
+		self.speed = 3
 
 	def serialize(self):
 		dicti = {}
