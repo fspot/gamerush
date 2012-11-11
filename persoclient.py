@@ -140,6 +140,7 @@ class PersoClient(object):
 	def sprite(self):
 		if self.projo:
 			self.spr = sf.Sprite(IMG['d/bibine'])
+			self.spr.SetPosition(self.x, self.y)
 			return self.spr
 		elif self.race == NAIN:
 			seq = NAINSEQ
