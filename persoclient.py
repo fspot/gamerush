@@ -138,6 +138,7 @@ class PersoClient(object):
 		self.x = msg['x']
 		self.y = msg['y']
 		self.id = msg['id']
+		self.marto = 0
 		if 'pr' in msg:
 			self.projo = True
 		else:
@@ -209,6 +210,7 @@ class PersoClient(object):
 		if 'y' in msg: self.y = msg['y']
 		if 'a' in msg: self.alpha = msg['a']
 		if 'an' in msg: self.animate(msg['an'])
+		if 'm' in msg: self.marto = time.time()
 
 	def animate(self, anim):
 		if self.race == NAIN:
@@ -235,7 +237,10 @@ class PersoClient(object):
 	def arm(self):
 		if not self.projo:
 			if self.race == NAIN:
-				arme = sf.Sprite(IMG['n/b/b'])
+				if time.time() - self.marto < 5.0:
+					arme = sf.Sprite(IMG['n/b/m'])
+				else:
+					arme = sf.Sprite(IMG['n/b/b'])
 				arme.SetCenter(6,12)
 				arme.SetPosition(self.x + STATICOFS['n/b/b'][0], self.y + STATICOFS['n/b/b'][1])
 				arme.SetRotation(self.alpha)
