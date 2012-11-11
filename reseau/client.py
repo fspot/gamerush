@@ -25,7 +25,11 @@ class Client(MyProtocol):
     def connectionMade(self):
         print "(>) Connected"
         nom = "joueur{0}".format(randint(1,999))
-        self.write({'n': nom, 'r':ELFE})  # race : nain
+        if self.glob['race'] == 'nain':
+            race = NAIN
+        else:
+            race = ELFE
+        self.write({'n': nom, 'r':race})  # race : nain
     
     def connectionLost(self, reason):
         print "(<) Disconnected"    

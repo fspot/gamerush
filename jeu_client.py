@@ -7,7 +7,7 @@ from PySFML import sf
 from pdb import set_trace as rrr
 from twisted.internet import reactor
 import animenv, persoclient, son
-import random
+import random, sys
 
 # globaux 
 FREQ = 30.0
@@ -106,6 +106,7 @@ def boucle_de_rendu():
             pass
 
 def main():
+    GLOB['race'] = sys.argv[1]
     thread_reseau = threading.Thread(target=net.fct_reseau, args=(GLOB,))
     rendu = threading.Thread(target=boucle_de_rendu)
     print '## le thread va starter'
